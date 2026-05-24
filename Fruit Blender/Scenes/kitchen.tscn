@@ -1,0 +1,87 @@
+[gd_scene load_steps=2 format=3 uid="uid://cdi2hlmx4rlgv"]
+
+[ext_resource type="Script" uid="uid://dbtb2xjaj8hnd" path="res://Scenes/kitchen.gd" id="1_7u47w"]
+
+[node name="Kitchen" type="Node2D"]
+script = ExtResource("1_7u47w")
+
+[node name="Fruit Selection" type="Node2D" parent="."]
+
+[node name="Fruit List" type="RichTextLabel" parent="Fruit Selection"]
+offset_left = 637.0
+offset_top = 1.0
+offset_right = 1028.0
+offset_bottom = 357.0
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "Cherry"
+meta_underlined = false
+hint_underlined = false
+
+[node name="Blender" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Blender"]
+offset_left = 636.0
+offset_top = 358.0
+offset_right = 1135.0
+offset_bottom = 596.0
+
+[node name="Blender_Size" type="Label" parent="Blender"]
+offset_left = 643.0
+offset_top = 530.0
+offset_right = 805.0
+offset_bottom = 588.0
+theme_override_font_sizes/font_size = 42
+text = "1"
+
+[node name="Dump" type="RichTextLabel" parent="Blender"]
+offset_left = 993.0
+offset_top = 587.0
+offset_right = 1313.0
+offset_bottom = 696.0
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "Dump"
+scroll_active = false
+meta_underlined = false
+hint_underlined = false
+
+[node name="Order Image" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Order Image"]
+offset_left = 32.0
+offset_top = 25.0
+offset_right = 303.0
+offset_bottom = 270.0
+
+[node name="Percentage" type="Label" parent="."]
+offset_left = 260.0
+offset_top = -5.0
+offset_right = 605.0
+offset_bottom = 127.0
+theme_override_font_sizes/font_size = 96
+text = "10%"
+horizontal_alignment = 1
+
+[node name="Size" type="Label" parent="."]
+offset_left = 90.0
+offset_top = 282.0
+offset_right = 244.0
+offset_bottom = 316.0
+theme_override_font_sizes/font_size = 24
+text = "small (3 fruit)"
+
+[node name="Done" type="RichTextLabel" parent="."]
+offset_left = 108.0
+offset_top = 509.0
+offset_right = 237.0
+offset_bottom = 600.0
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "Done"
+meta_underlined = false
+hint_underlined = false
+
+[connection signal="meta_clicked" from="Fruit Selection/Fruit List" to="." method="_on_fruit_list_meta_clicked"]
+[connection signal="meta_clicked" from="Blender/Dump" to="." method="_on_dump_meta_clicked"]
+[connection signal="meta_clicked" from="Done" to="." method="_on_done_meta_clicked"]
