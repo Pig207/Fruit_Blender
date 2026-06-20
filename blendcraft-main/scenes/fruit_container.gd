@@ -5,6 +5,7 @@ extends Control
 @onready var pickup_zone = $PickupZone
 @onready var fruit_grid = $FruitGridContainer
 @onready var container_image = $ContainerImg
+@onready var container_image2 = $ContainerImgFruitless
 const PhysicsFruit = preload("res://scenes/physics_fruit.tscn")
 var _active_fruit = null
 
@@ -16,6 +17,7 @@ func _ready():
 	_update_cursor()
 	
 	container_image.pivot_offset = container_image.size / 2 # offset for hover animation
+	container_image2.pivot_offset = container_image2.size / 2 # offset for hover animation
 func _update_cursor():
 	if get_global_rect().has_point(get_global_mouse_position()):
 		if fruit_count > 0:
@@ -40,10 +42,14 @@ func _scale_image_up(): # animation for hovering container
 	var tween = create_tween()
 	tween.tween_property(container_image, "scale", Vector2(1.05, 1.05), 0.1)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(container_image2, "scale", Vector2(1.05, 1.05), 0.1)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _scale_image_down(): # animation for hovering container
 	var tween = create_tween()
 	tween.tween_property(container_image, "scale", Vector2(1.0, 1.0), 0.1)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(container_image2, "scale", Vector2(1.0, 1.0), 0.1)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _gui_input(event): # pick up fruit if clicking on pickup zone with fruit
@@ -83,8 +89,10 @@ func _build_fruits(): # set fruit png
 		child.queue_free()
 	if true:#fruit_name == "cherry":
 		#var texture = load("res://assets/fruits/" + fruit_name + "_container.png")
-		var texture = load("res://assets/fruits/cherry_container.png")
+		var texture = load("res://assets/fruits/white2_cherry_container1.png")
 		container_image.texture = texture
+		var texture2 = load("res://assets/fruits/white2_cherry_container2.png")
+		container_image2.texture = texture2
 		for i in fruit_list:
 			if i[0] == fruit_name:
 				container_image.modulate = i[1]
