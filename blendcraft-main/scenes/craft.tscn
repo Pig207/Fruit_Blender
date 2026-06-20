@@ -1,0 +1,180 @@
+[gd_scene load_steps=15 format=3 uid="uid://duj4bma2ai5r"]
+
+[ext_resource type="Script" uid="uid://ccsrol7ftu23k" path="res://scenes/craft.gd" id="1_tj1xu"]
+[ext_resource type="Texture2D" uid="uid://b0wqheve04ddi" path="res://assets/craft3_front.png" id="2_gw37t"]
+[ext_resource type="Texture2D" uid="uid://cfiqctn7pwckb" path="res://assets/craft3_back.png" id="3_247wb"]
+[ext_resource type="Texture2D" uid="uid://7deat2diqf2l" path="res://assets/blendernolid.png" id="3_alos5"]
+[ext_resource type="Texture2D" uid="uid://dxfuo15xfv07b" path="res://assets/blenderglass.png" id="4_sccp2"]
+[ext_resource type="Texture2D" uid="uid://dl0jl73k2tq25" path="res://assets/blenderglass_white2.png" id="6_247wb"]
+[ext_resource type="Texture2D" uid="uid://xnm4x8jawm1v" path="res://assets/person1.png" id="6_nxr8o"]
+[ext_resource type="Texture2D" uid="uid://dfgx8m06o54d3" path="res://assets/bubble.png" id="7_247wb"]
+[ext_resource type="Texture2D" uid="uid://dweqw8pggnkpm" path="res://assets/person2.png" id="8_whde3"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_eypww"]
+bounce = 0.09
+absorbent = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vwgb8"]
+size = Vector2(1185.25, 239.5)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_sccp2"]
+bounce = 0.25
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fv520"]
+size = Vector2(72, 2476.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sccp2"]
+size = Vector2(106, 2435.5)
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_tj1xu")
+
+[node name="Craft" type="Sprite2D" parent="."]
+position = Vector2(574, 319)
+scale = Vector2(0.615278, 0.501493)
+texture = ExtResource("2_gw37t")
+
+[node name="Craft_Back" type="Sprite2D" parent="."]
+z_index = -30
+position = Vector2(574, 319)
+scale = Vector2(0.615278, 0.501493)
+texture = ExtResource("3_247wb")
+
+[node name="Blendernolid" type="Sprite2D" parent="."]
+z_index = 5
+position = Vector2(1037, 305)
+scale = Vector2(0.519043, 0.519043)
+texture = ExtResource("3_alos5")
+
+[node name="BlenderCollision" type="StaticBody2D" parent="Blendernolid" groups=["dragging_barriers"]]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blendernolid/BlenderCollision"]
+build_mode = 1
+polygon = PackedVector2Array(-154.13, -204.222, -134.864, -196.515, -100.184, 55.8721, -117.524, 55.8721, -134.864, 221.562, -129.084, 235.048, 86.6979, 231.195, 96.3312, 221.562, 78.9916, 57.7987, 59.7252, 53.9454, 94.4044, -196.515, 115.597, -204.222, 115.597, -204.222, 94.4044, -196.515, 59.7252, 55.8721, 78.9916, 57.7987, -102.111, 57.7987, -134.864, -198.442)
+
+[node name="BlenderGlass" type="Sprite2D" parent="Blendernolid"]
+z_index = -5
+texture = ExtResource("4_sccp2")
+
+[node name="BlenderFull" type="Sprite2D" parent="Blendernolid"]
+z_index = -5
+position = Vector2(1.92666, 6.74313)
+scale = Vector2(1.08372, 0.997178)
+texture = ExtResource("6_247wb")
+
+[node name="DetectFruit" type="Area2D" parent="Blendernolid"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blendernolid/DetectFruit"]
+polygon = PackedVector2Array(-134.864, -198.442, -134.864, -198.442, 94.4045, -196.515, 57.7986, 57.7987, -100.184, 57.7987)
+
+[node name="Button" type="Button" parent="Blendernolid"]
+offset_left = -58.0
+offset_top = 116.0
+offset_right = 8.0
+offset_bottom = 181.0
+
+[node name="ContainerArea" type="Area2D" parent="."]
+
+[node name="GridOfContainers" type="GridContainer" parent="."]
+offset_left = 7.0
+offset_top = 341.0
+offset_right = 467.0
+offset_bottom = 562.0
+size_flags_vertical = 3
+mouse_filter = 2
+columns = 4
+
+[node name="BarSurface" type="StaticBody2D" parent="." groups=["dragging_barriers", "settle_line"]]
+physics_material_override = SubResource("PhysicsMaterial_eypww")
+
+[node name="BarCollision" type="CollisionShape2D" parent="BarSurface" groups=["dragging_barriers"]]
+position = Vector2(579.375, 554.75)
+shape = SubResource("RectangleShape2D_vwgb8")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["bounce2", "dragging_barriers"]]
+physics_material_override = SubResource("PhysicsMaterial_sccp2")
+
+[node name="LeftWall" type="CollisionShape2D" parent="StaticBody2D" groups=["bounce2", "dragging_barriers"]]
+position = Vector2(-36, -730.75)
+shape = SubResource("RectangleShape2D_fv520")
+
+[node name="RightWall" type="CollisionShape2D" parent="StaticBody2D" groups=["bounce2", "dragging_barriers"]]
+position = Vector2(1205, -783.25)
+shape = SubResource("RectangleShape2D_sccp2")
+
+[node name="Percent_Correct" type="Label" parent="."]
+offset_left = -17.0
+offset_top = 425.0
+offset_right = 1165.0
+offset_bottom = 556.0
+theme_override_font_sizes/font_size = 84
+text = "0%"
+horizontal_alignment = 1
+
+[node name="Blender_Size" type="Label" parent="."]
+texture_filter = 1
+offset_left = 991.0
+offset_top = 426.0
+offset_right = 1062.0
+offset_bottom = 484.0
+theme_override_font_sizes/font_size = 42
+text = "0"
+horizontal_alignment = 1
+
+[node name="Done" type="RichTextLabel" parent="."]
+offset_left = 9.0
+offset_right = 167.0
+offset_bottom = 63.0
+theme_override_font_sizes/normal_font_size = 42
+bbcode_enabled = true
+text = "Next"
+meta_underlined = false
+hint_underlined = false
+
+[node name="Dump" type="RichTextLabel" parent="."]
+offset_left = 1018.0
+offset_right = 1152.0
+offset_bottom = 63.0
+theme_override_font_sizes/normal_font_size = 42
+bbcode_enabled = true
+text = "Dump"
+meta_underlined = false
+hint_underlined = false
+
+[node name="Request" type="Sprite2D" parent="."]
+z_index = -4
+position = Vector2(743, 112)
+scale = Vector2(0.112625, 0.113885)
+texture = ExtResource("7_247wb")
+
+[node name="Request_Label" type="Label" parent="."]
+z_index = -3
+texture_filter = 1
+offset_left = 658.0
+offset_top = 85.0
+offset_right = 844.0
+offset_bottom = 132.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 21
+text = "Small ( 2 )"
+horizontal_alignment = 1
+
+[node name="person1" type="Sprite2D" parent="."]
+z_index = -10
+position = Vector2(-117, 232)
+texture = ExtResource("6_nxr8o")
+
+[node name="person2" type="Sprite2D" parent="."]
+z_index = -10
+position = Vector2(1365, 251)
+texture = ExtResource("8_whde3")
+
+[node name="Thanks_Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="body_entered" from="Blendernolid/DetectFruit" to="." method="_on_detect_fruit_body_entered"]
+[connection signal="body_exited" from="Blendernolid/DetectFruit" to="." method="_on_detect_fruit_body_exited"]
+[connection signal="pressed" from="Blendernolid/Button" to="." method="_on_button_pressed"]
+[connection signal="meta_clicked" from="Done" to="." method="_on_done_meta_clicked"]
+[connection signal="meta_clicked" from="Dump" to="." method="_on_dump_meta_clicked"]
+[connection signal="timeout" from="Thanks_Timer" to="." method="_on_thanks_timer_timeout"]

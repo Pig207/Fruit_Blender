@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://1joxulws3lwf"]
+
+[ext_resource type="Texture2D" uid="uid://d4i143eufkida" path="res://assets/e8b27aba9af1540dff13cbd8177d68fc.jpg" id="1_di2bh"]
+[ext_resource type="Texture2D" uid="uid://3er6vwe3lhil" path="res://assets/bar.png" id="2_rge1j"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="E8b27Aba9Af1540Dff13Cbd8177d68Fc" type="Sprite2D" parent="."]
+position = Vector2(581, 372)
+scale = Vector2(1.57473, 1.01427)
+texture = ExtResource("1_di2bh")
+
+[node name="Bar" type="Sprite2D" parent="."]
+position = Vector2(580.125, 329.5)
+scale = Vector2(0.604036, 0.587963)
+texture = ExtResource("2_rge1j")

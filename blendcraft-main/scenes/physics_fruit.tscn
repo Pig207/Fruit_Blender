@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://citsirmio5txg"]
+
+[ext_resource type="Script" uid="uid://dp55ebscjwlfd" path="res://scenes/physics_fruit.gd" id="1_s6g34"]
+[ext_resource type="Texture2D" uid="uid://eo2e56jwmnf8" path="res://assets/fruits/cherry.png" id="2_gwdcn"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7yhlo"]
+bounce = 0.47
+
+[node name="PhysicsFruit" type="RigidBody2D"]
+physics_material_override = SubResource("PhysicsMaterial_7yhlo")
+script = ExtResource("1_s6g34")
+
+[node name="FruitImage" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_gwdcn")
+
+[node name="BarCollisionDetector" type="Area2D" parent="."]
+scale = Vector2(2, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BarCollisionDetector"]
+position = Vector2(0.6, 1)
+scale = Vector2(1.1, 1.1)
+
+[node name="FruitHitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0.6, 1)
+scale = Vector2(1.1, 1.1)

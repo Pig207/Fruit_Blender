@@ -1,0 +1,90 @@
+[gd_scene load_steps=10 format=3 uid="uid://duj4bma2ai5r"]
+
+[ext_resource type="Script" uid="uid://ccsrol7ftu23k" path="res://scenes/craft.gd" id="1_tj1xu"]
+[ext_resource type="Texture2D" uid="uid://c7vdnk7h0ikpx" path="res://assets/craft2.png" id="2_sccp2"]
+[ext_resource type="Texture2D" uid="uid://7deat2diqf2l" path="res://assets/blendernolid.png" id="3_alos5"]
+[ext_resource type="Texture2D" uid="uid://dxfuo15xfv07b" path="res://assets/blenderglass.png" id="4_sccp2"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_eypww"]
+bounce = 0.09
+absorbent = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vwgb8"]
+size = Vector2(1185.25, 251)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_sccp2"]
+bounce = 0.25
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fv520"]
+size = Vector2(72, 2476.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sccp2"]
+size = Vector2(106, 2435.5)
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_tj1xu")
+
+[node name="Craft" type="Sprite2D" parent="."]
+position = Vector2(574, 296.118)
+scale = Vector2(0.615278, 0.452415)
+texture = ExtResource("2_sccp2")
+
+[node name="Blendernolid" type="Sprite2D" parent="."]
+z_index = 5
+position = Vector2(1037, 305)
+scale = Vector2(0.519043, 0.519043)
+texture = ExtResource("3_alos5")
+
+[node name="BlenderCollision" type="StaticBody2D" parent="Blendernolid" groups=["dragging_barriers"]]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blendernolid/BlenderCollision"]
+build_mode = 1
+polygon = PackedVector2Array(-154.13, -204.222, -134.864, -196.515, -100.184, 55.8721, -117.524, 55.8721, -134.864, 221.562, -129.084, 235.048, 86.6979, 231.195, 96.3312, 221.562, 78.9916, 57.7987, 59.7252, 53.9454, 94.4044, -196.515, 115.597, -204.222, 115.597, -204.222, 94.4044, -196.515, 59.7252, 55.8721, 78.9916, 57.7987, -102.111, 57.7987, -134.864, -198.442)
+
+[node name="BlenderGlass" type="Sprite2D" parent="Blendernolid"]
+z_index = 5
+texture = ExtResource("4_sccp2")
+
+[node name="DetectFruit" type="Area2D" parent="Blendernolid"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blendernolid/DetectFruit"]
+polygon = PackedVector2Array(-134.864, -198.442, -134.864, -198.442, 94.4045, -196.515, 57.7986, 57.7987, -100.184, 57.7987)
+
+[node name="Button" type="Button" parent="Blendernolid"]
+offset_left = -58.0
+offset_top = 116.0
+offset_right = 8.0
+offset_bottom = 181.0
+
+[node name="ContainerArea" type="Area2D" parent="."]
+
+[node name="GridOfContainers" type="GridContainer" parent="."]
+offset_left = 7.0
+offset_top = 341.0
+offset_right = 467.0
+offset_bottom = 562.0
+size_flags_vertical = 3
+mouse_filter = 2
+columns = 4
+
+[node name="BarSurface" type="StaticBody2D" parent="." groups=["dragging_barriers", "settle_line"]]
+physics_material_override = SubResource("PhysicsMaterial_eypww")
+
+[node name="BarCollision" type="CollisionShape2D" parent="BarSurface" groups=["dragging_barriers"]]
+position = Vector2(579.375, 549)
+shape = SubResource("RectangleShape2D_vwgb8")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["bounce2", "dragging_barriers"]]
+physics_material_override = SubResource("PhysicsMaterial_sccp2")
+
+[node name="LeftWall" type="CollisionShape2D" parent="StaticBody2D" groups=["bounce2", "dragging_barriers"]]
+position = Vector2(-36, -730.75)
+shape = SubResource("RectangleShape2D_fv520")
+
+[node name="RightWall" type="CollisionShape2D" parent="StaticBody2D" groups=["bounce2", "dragging_barriers"]]
+position = Vector2(1205, -783.25)
+shape = SubResource("RectangleShape2D_sccp2")
+
+[connection signal="body_entered" from="Blendernolid/DetectFruit" to="." method="_on_detect_fruit_body_entered"]
+[connection signal="body_exited" from="Blendernolid/DetectFruit" to="." method="_on_detect_fruit_body_exited"]
+[connection signal="pressed" from="Blendernolid/Button" to="." method="_on_button_pressed"]
