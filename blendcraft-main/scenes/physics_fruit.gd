@@ -26,9 +26,10 @@ const DROP_ROTATION_FACTOR  = 1.2     # max rotation factor for dropping (rand i
 @onready var settle_detector   = $BarCollisionDetector
 @onready var settle_shape      = $BarCollisionDetector/CollisionShape2D
 
+var fruit_list = [["cherry", "#ff0000"], ["blueberry", "#0000ff"], ["kale", "#00ff00"], ["strawberry", "#ffa3cb"], ["banana", "#fff563"]]#, ["orange", "#ff901d"]]
+
 func _ready():
-	var fruit_list = [["cherry", "#ff0000"], ["blueberry", "#0000ff"], ["kale", "#00ff00"], ["Strawberry", "#ffa3cb"], ["Banana", "#fff563"], ["Orange", "#ff901d"]]
-	print('initializing physics_fruit')
+	#print('initializing physics_fruit')
 	freeze = true # fruit affected by physics or not (dragging)
 	input_pickable = true # fruit interactable w mouse
 	self.name = fruit_name
@@ -94,7 +95,8 @@ func _process(delta):
 
 		if Input.is_action_just_released("click"):
 			_release()
-	
+	if Input.is_action_just_released("r"):
+		queue_free()
 
 # test what amt of desired motion is allowed based on where barriers are
 func _test_motion_against_barriers(motion: Vector2) -> Vector2:
@@ -192,6 +194,16 @@ func _get_fruit_shape(name: String) -> Shape2D: # dif fruit hitboxes
 			s.height = 40
 			return s
 		"kale":
+			var s    = CapsuleShape2D.new()
+			s.radius = 14
+			s.height = 40
+			return s
+		"strawberry":
+			var s    = CapsuleShape2D.new()
+			s.radius = 14
+			s.height = 40
+			return s
+		"banana":
 			var s    = CapsuleShape2D.new()
 			s.radius = 14
 			s.height = 40

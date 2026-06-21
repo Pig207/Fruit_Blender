@@ -14,3 +14,4 @@ func _process(_delta):
 	# 4. If the track finishes, play it again loop-style
 	if not playing:
 		play()
+		pass

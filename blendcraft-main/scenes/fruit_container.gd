@@ -8,6 +8,7 @@ extends Control
 @onready var container_image2 = $ContainerImgFruitless
 const PhysicsFruit = preload("res://scenes/physics_fruit.tscn")
 var _active_fruit = null
+var fruit_list = [["cherry", "#ff0000"], ["blueberry", "#0000ff"], ["kale", "#00ff00"], ["strawberry", "#ffa3cb"], ["banana", "#fff563"]]#, ["orange", "#ff901d"]]
 
 func _ready():
 	# signals
@@ -18,6 +19,11 @@ func _ready():
 	
 	container_image.pivot_offset = container_image.size / 2 # offset for hover animation
 	container_image2.pivot_offset = container_image2.size / 2 # offset for hover animation
+	
+func _physics_process(delta: float) -> void:
+	if Input.is_action_just_released("r"):
+		queue_free()
+		
 func _update_cursor():
 	if get_global_rect().has_point(get_global_mouse_position()):
 		if fruit_count > 0:
@@ -84,7 +90,6 @@ func setup(name: String, count: int): # init
 	_build_fruits()
 
 func _build_fruits(): # set fruit png
-	var fruit_list = [["cherry", "#ff0000"], ["blueberry", "#0000ff"], ["kale", "#00ff00"], ["Strawberry", "#ffa3cb"], ["Banana", "#fff563"], ["Orange", "#ff901d"]]
 	for child in fruit_grid.get_children():
 		child.queue_free()
 	if true:#fruit_name == "cherry":

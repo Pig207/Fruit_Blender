@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://duj4bma2ai5r"]
+[gd_scene load_steps=18 format=3 uid="uid://duj4bma2ai5r"]
 
 [ext_resource type="Script" uid="uid://ccsrol7ftu23k" path="res://scenes/craft.gd" id="1_tj1xu"]
 [ext_resource type="Texture2D" uid="uid://b0wqheve04ddi" path="res://assets/craft3_front.png" id="2_gw37t"]
@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://xnm4x8jawm1v" path="res://assets/person1.png" id="6_nxr8o"]
 [ext_resource type="Texture2D" uid="uid://dfgx8m06o54d3" path="res://assets/bubble.png" id="7_247wb"]
 [ext_resource type="Texture2D" uid="uid://dweqw8pggnkpm" path="res://assets/person2.png" id="8_whde3"]
+[ext_resource type="Texture2D" uid="uid://73cyfme223ge" path="res://assets/rgb_triangle.png" id="10_7i7uc"]
+[ext_resource type="Texture2D" uid="uid://bcuotanmnbjso" path="res://assets/uncheck.png" id="11_a8bng"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_247wb"]
 radius = 37.0593
@@ -81,11 +83,11 @@ shape = SubResource("CircleShape2D_247wb")
 [node name="GridOfContainers" type="GridContainer" parent="."]
 offset_left = 7.0
 offset_top = 341.0
-offset_right = 467.0
+offset_right = 884.0
 offset_bottom = 562.0
 size_flags_vertical = 3
 mouse_filter = 2
-columns = 4
+columns = 6
 
 [node name="BarSurface" type="StaticBody2D" parent="." groups=["dragging_barriers", "settle_line"]]
 physics_material_override = SubResource("PhysicsMaterial_eypww")
@@ -123,6 +125,14 @@ offset_bottom = 484.0
 theme_override_font_sizes/font_size = 42
 text = "0"
 horizontal_alignment = 1
+
+[node name="Points" type="Label" parent="."]
+offset_left = 10.0
+offset_top = 580.0
+offset_right = 152.0
+offset_bottom = 638.0
+theme_override_font_sizes/font_size = 42
+text = "1"
 
 [node name="Done" type="RichTextLabel" parent="."]
 offset_left = 9.0
@@ -179,7 +189,24 @@ texture = ExtResource("8_whde3")
 one_shot = true
 
 [node name="Snappy_Timer" type="Timer" parent="."]
+wait_time = 1.5
 one_shot = true
+
+[node name="Color Triangle" type="Node2D" parent="."]
+
+[node name="Triangle" type="Sprite2D" parent="Color Triangle"]
+z_index = -20
+texture_filter = 1
+position = Vector2(174, 163)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("10_7i7uc")
+
+[node name="Target" type="Sprite2D" parent="Color Triangle/Triangle"]
+modulate = Color(0, 0, 0, 1)
+texture_filter = 1
+position = Vector2(0, 63)
+scale = Vector2(2.8, 2.8)
+texture = ExtResource("11_a8bng")
 
 [connection signal="body_entered" from="Blendernolid/DetectFruit" to="." method="_on_detect_fruit_body_entered"]
 [connection signal="body_exited" from="Blendernolid/DetectFruit" to="." method="_on_detect_fruit_body_exited"]

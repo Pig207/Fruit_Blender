@@ -4,7 +4,9 @@ extends Node
 var fruits: Dictionary = {
 	"cherry": 4,
 	"kale": 4,
-	"blueberry": 4
+	"blueberry": 4,
+	"strawberry": 4,
+	"banana": 4
 }
 var in_blender = []
 var blended_fruits = []
@@ -13,7 +15,7 @@ var current_blend_color = Color("#ffffff00")
 var walking = false
 var waiting_to_walk = 0
 var possible_sizes = [["Small", 2], ["Small", 2], ["Small", 2], ["Medium", 3], ["Medium", 3], ["Large", 5]]
-var fruit_list = [["cherry", "#ff0000"], ["blueberry", "#0000ff"], ["kale", "#00ff00"]]#, ["Strawberry", "#ffa3cb"], ["Banana", "#fff563"], ["Orange", "#ff901d"]]
+var fruit_list = [["cherry", "#ff0000"], ["blueberry", "#0000ff"], ["kale", "#00ff00"], ["banana", "#fff563"], ["strawberry", "#ffa3cb"]]#, ["orange", "#ff901d"]]
 var target_color
 var percentage_similarity = 0
 var current_size = ["Large", 5]
@@ -21,6 +23,7 @@ var thanking = false
 var mouse_on_blender_button = false
 var total_smoothie_count = 0
 var snappyfied = false
+var triangle_corners
 
 # da blenda animation
 # Configuration variables
@@ -44,16 +47,27 @@ var is_dumping: bool = false
 const FruitContainer = preload("res://scenes/fruit_container.tscn")
 
 func _ready():
+	in_blender = []
+	blended_fruits = []
+	$Thanks_Timer.stop()
+	$Snappy_Timer.stop()
 	total_smoothie_count = 0
+	$Points.text = str(total_smoothie_count-1)
+	$Percent_Correct.text = "0%"
+	$Blender_Size.text = "0"
 	generate_new_color()
-	_build_fruit_containers()
+	_build_fruit_containers(["cherry", "kale", "blueberry"])
 	$Blendernolid/BlenderFull.modulate = Color("#ffffff00")
 	$Request.modulate = Color("#ffffff00")
 	$Request_Label.visible = false
 	setup_Done()
 	setup_Dump()
 	setup_people()
-
+	triangle_corners = get_corner_positions()
+	#print(triangle_corners)
+	#get_node("Color Triangle/Triangle/Target").position = set_target_on_triangle(current_blend_color)
+	get_node("Color Triangle/Triangle/Target").position = set_target_on_triangle(Color("#ffffff"))
+	
 func _physics_process(delta: float) -> void:
 	var speed: float = 3.0
 	var bob_speed: float = 12.0     # How fast it steps up and down
@@ -78,6 +92,8 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_released("click") and mouse_on_blender_button == true:
 		start_blending()
 		blend()
+	if Input.is_action_just_released("r"):
+		_ready()
 		
 	if is_blending:
 		# Tick down the timer (1/60th of a second per physics frame)
@@ -127,10 +143,10 @@ func _physics_process(delta: float) -> void:
 			$Blendernolid.scale.y = base_scale_y2 - (squash_factor * max_compress2)
 
 # add all the fruits in a given fruit dish to the grid container
-func _build_fruit_containers():
-	for fruit_name in fruits:
-		print(fruit_name)
-		print(fruits[fruit_name])
+func _build_fruit_containers(arra):
+	for fruit_name in arra: #fruits:
+		#print(fruit_name)
+		#print(fruits[fruit_name])
 		var container = FruitContainer.instantiate()
 		fruit_slot_area.add_child(container)
 		container.setup(fruit_name, fruits[fruit_name])
@@ -157,7 +173,7 @@ func blend():
 	
 	if thanking == true:
 		return
-	var fruits = ["cherry", "blueberry", "kale"]
+	var fruits = ["cherry", "blueberry", "kale", "strawberry", "banana"]
 	var goners = []
 	for i in in_blender:
 		for j in fruits:
@@ -191,6 +207,7 @@ func blend():
 				$Request_Label.text = ["Thanks!", "Thank you!", "Perfect!"].pick_random()
 			else:
 				$Request_Label.text = ["Thanks!", "Thank you!", "About time...", "Perfect!"].pick_random()
+	get_node("Color Triangle/Triangle/Target").position = set_target_on_triangle(current_blend_color)
 				
 func average_color_list(blended_fruits):
 	var colors = []
@@ -262,6 +279,51 @@ func get_color_similarity(color1: Color, color2: Color):
 	
 	return clampf(similarity, 0.0, 100.0)
 	
+func get_corner_positions() -> Dictionary:
+	# Ensure there is a texture loaded to avoid null errors
+	var texture = get_node("Color Triangle/Triangle").texture
+	if not texture:
+		print("woop")
+		return {}
+
+	# Get the base texture size in pixels
+	var tex_size = texture.get_size()
+	
+	# Calculate scaled half-extents (accounting for node scale and mirroring/flip)
+	var half_width = (tex_size.x / 2.0) * abs(get_node("Color Triangle/Triangle").scale.x) * 1.4
+	var half_height = (tex_size.y / 2.0) * abs(get_node("Color Triangle/Triangle").scale.y) * 1.4
+
+	# Calculate all four global positions
+	return {
+		"top_left": Vector2(-half_width, -half_height),
+		"top_right": Vector2(half_width, -half_height),
+		"bottom_left": Vector2(-half_width, half_height),
+		"bottom_right": Vector2(half_width, half_height)
+	}
+	
+func set_target_on_triangle(current_color: Color):
+	var pos_green = (triangle_corners["top_right"] + triangle_corners["top_left"]) / 2
+	var pos_red = triangle_corners["bottom_right"] 
+	var pos_blue = triangle_corners["bottom_left"] 
+	
+	# 1. Normalize the color channels so they always sum up to 1.0.
+	# This ensures the marker always stays flat on the 2D plane of the triangle,
+	# even if the color's brightness varies slightly.
+	var total := current_color.r + current_color.g + current_color.b
+	
+	if total == 0.0:
+		# Fallback to the center of the triangle if the color is pure black
+		return (pos_red + pos_green + pos_blue) / 3.0
+		
+	var w_red := current_color.r / total
+	var w_green := current_color.g / total
+	var w_blue := current_color.b / total
+	
+	# 2. Use the normalized channels as weights to find the final 2D position
+	var marker_pos = (pos_red * w_red) + (pos_green * w_green) + (pos_blue * w_blue)
+	
+	return marker_pos
+	
 func setup_Done():
 	$Done.text = "[left][url=\"" + "Next" + "\"]" + "Next" + "[/url][/left]" + "\n"
 				
@@ -272,7 +334,7 @@ func setup_people():
 	for people in [$person1, $person2]:
 		people.visible = true
 	$person1.position = Vector2(-117, 250)
-	#$person2.position = Vector2(-117, 232)
+	$person2.position = Vector2(11700, 250)
 	walking = true
 	waiting_to_walk = 0
 
@@ -305,8 +367,11 @@ func dump_blender():
 	$Blendernolid/BlenderFull.modulate = Color("#ffffff00")
 	$Percent_Correct.text = "0%"
 	$Blender_Size.text = "0"
+	get_node("Color Triangle/Triangle/Target").position = set_target_on_triangle(Color("#ffffff"))
 	
 func generate_new_color():
+	
+	
 	if total_smoothie_count == 0:
 		current_size = possible_sizes[0]
 	elif total_smoothie_count == 1:
@@ -321,12 +386,25 @@ func generate_new_color():
 		target_color_list.append(select_random_fruit_color())
 	target_color = average_color_list(target_color_list)
 	if target_color == Color("#ffffff"):
-		generate_new_color()
 		total_smoothie_count -= 1
-	#return(target_color)
+		generate_new_color()
+	else:
+		#return(target_color)
+		$Points.text = str(total_smoothie_count-1)
+		
+		if total_smoothie_count == 4:
+			_build_fruit_containers(["banana"])
+		elif total_smoothie_count == 8:
+			_build_fruit_containers(["strawberry"])
 
 func select_random_fruit_color():
-	return ((fruit_list.pick_random())[0])
+	#print(total_smoothie_count)
+	if total_smoothie_count >= 8:
+		return ((fruit_list.pick_random())[0])
+	elif total_smoothie_count >= 4:
+		return (([fruit_list[0], fruit_list[1], fruit_list[2], fruit_list[3]].pick_random())[0])
+	else:
+		return (([fruit_list[0], fruit_list[1], fruit_list[2]].pick_random())[0])
 
 
 func _on_thanks_timer_timeout() -> void:
@@ -345,11 +423,11 @@ func _on_blender_button_mouse_exited() -> void:
 
 func _on_snappy_timer_timeout() -> void:
 	if snappyfied == false:
-		print("eh")
+		#print("eh")
 		snappyfied = true
 		$Request_Label.text = "and make it\nsnappy!"
 		$Snappy_Timer.stop()
 		$Snappy_Timer.start(1.0)
 	else:
-		print("ohh")
+		#print("ohh")
 		$Request_Label.text = current_size[0] + " (" + str(current_size[1]) + " fruit)"
