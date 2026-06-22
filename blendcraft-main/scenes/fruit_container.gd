@@ -117,6 +117,10 @@ func _spawn_dragging_fruit(): # pick up fruit
 	if [1,2].pick_random() == 1:
 		fruit.get_node("FruitImage").flip_h = true
 		fruit.get_node("FruitImageStem").flip_h = true
+	
+		#texture = load("res://assets/fruits/fruit_" + fruit_name + "_white.png")
+		#texture2 = load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
+		
 	get_tree().current_scene.add_child(fruit)
 	_active_fruit = fruit # set active fruit ref
 	_scale_image_down()
@@ -144,10 +148,23 @@ func _build_fruits(): # set fruit png
 	for child in fruit_grid.get_children():
 		child.queue_free()
 	for i in container_fruit.get_children():
-		var texture = load("res://assets/fruits/fruit_" + fruit_name + "_white.png")
+		var texture
+		var texture2
+		if [1,2,3,4,5].pick_random() in [1,2]:
+			if ResourceLoader.exists("res://assets/fruits/fruit_" + fruit_name + "_white2.png"):
+				texture = load("res://assets/fruits/fruit_" + fruit_name + "_white2.png")
+			else:
+				texture = load("res://assets/fruits/fruit_" + fruit_name + "_white.png")
+			if ResourceLoader.exists("res://assets/fruits/fruit_" + fruit_name + "_stem2.png"):
+				texture2 = load("res://assets/fruits/fruit_" + fruit_name + "_stem2.png")
+			else:
+				texture2 = null#load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
+		else:
+			texture = load("res://assets/fruits/fruit_" + fruit_name + "_white.png")
+			texture2 = load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
+		
 		i.texture = texture
 		i.self_modulate = get_parent().get_parent().fruits_colors[fruit_name]
-		var texture2 = load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
 		i.get_node("Container_Stem_1").texture = texture2
 		#new_seed
 		if [1,2].pick_random() == 1:

@@ -285,7 +285,7 @@ func start_dumping():
 	blend_timer2 = 0.0 # Count UP from 0 to 0.5
 	is_dumping = true
 
-func blend():
+func blend(dumpin = false):
 	
 	if thanking == true:
 		return
@@ -294,7 +294,8 @@ func blend():
 	for i in in_blender:
 		for j in fruits:
 			if j in i.name:
-				blended_fruits.append(j)
+				if dumpin == false:
+					blended_fruits.append(j)
 				goners.append(i)
 
 	for i in goners:
@@ -479,7 +480,7 @@ func _on_dump_meta_clicked(meta: Variant) -> void:
 	
 func dump_blender():
 	start_dumping()
-	blend()
+	blend(true)
 	blended_fruits = []
 	$Blendernolid/BlenderFull.modulate = Color("#ffffff00")
 	$UI_Labels/Percent_Correct.text = "0%"
@@ -498,7 +499,7 @@ func generate_new_color():
 	total_smoothie_count += 1
 	var target_color_list = []
 	
-	$Request_Label.text = current_size[0] + " (" + str(current_size[1]) + " fruit)"
+	$Request_Label.text = current_size[0] + "\n(" + str(current_size[1]) + " fruit)"
 	for i in range(1, current_size[1] + 1):
 		target_color_list.append(select_random_fruit_color())
 	target_color = average_color_list(target_color_list)
@@ -558,7 +559,7 @@ func _on_snappy_timer_timeout() -> void:
 		$Snappy_Timer.start(1.0)
 	else:
 		#print("ohh")
-		$Request_Label.text = current_size[0] + " (" + str(current_size[1]) + " fruit)"
+		$Request_Label.text = current_size[0] + "\n(" + str(current_size[1]) + " fruit)"
 
 
 func _on_area_2d_mouse_entered() -> void:
