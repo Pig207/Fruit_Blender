@@ -13,7 +13,7 @@ var mouse_velocity_history: Array = []
 var last_mouse_pos: Vector2 = Vector2.ZERO
 
 # snapping from barriers after no longer blocked
-const BARRIER_SNAP_SPEED = 1500.0  # pixels/sec to mouse when no longer blocked
+const BARRIER_SNAP_SPEED = 2000.0  # pixels/sec to mouse when no longer blocked
 var clamped_drag_pos: Vector2 = Vector2.ZERO 
 
 # rotation on release
@@ -154,7 +154,7 @@ func _release(): # apply release velocity&rotation to fruit
 	freeze           = false
 	if get_parent():
 		get_parent().hands_full = is_dragging
-		print(str(get_parent().last_container_hover))
+		#print(str(get_parent().last_container_hover))
 		if get_parent().last_container_hover != null:
 			get_parent().last_container_hover._on_mouse_entered()
 		else:
@@ -168,7 +168,7 @@ func _release(): # apply release velocity&rotation to fruit
 	if throw_velocity.length() > MIN_THROW_SPEED:
 		linear_velocity  = throw_velocity
 		# proportional to speed, and matches the side it was thrown
-		angular_velocity = throw_velocity.length() * THROW_ROTATION_FACTOR * sign(throw_velocity.x)
+		angular_velocity = throw_velocity.length() * THROW_ROTATION_FACTOR * sign(throw_velocity.x) * 1.2 #arbitrary, idk lol
 	else:
 		linear_velocity  = Vector2(0, 10)
 		# slight random spin when dropped

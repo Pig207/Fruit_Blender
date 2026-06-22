@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bcuotanmnbjso" path="res://assets/uncheck.png" id="11_a8bng"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_247wb"]
-radius = 37.0593
+radius = 59.72534
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_eypww"]
 bounce = 0.09
@@ -24,7 +24,6 @@ absorbent = true
 size = Vector2(1185.25, 239.5)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_sccp2"]
-bounce = 0.03
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fv520"]
 size = Vector2(72, 2476.5)
@@ -142,7 +141,7 @@ text = "1"
 
 [node name="Done" type="RichTextLabel" parent="UI_Labels" unique_id=2079644187]
 offset_left = 9.0
-offset_right = 167.0
+offset_right = 114.0
 offset_bottom = 63.0
 theme_override_font_sizes/normal_font_size = 42
 bbcode_enabled = true

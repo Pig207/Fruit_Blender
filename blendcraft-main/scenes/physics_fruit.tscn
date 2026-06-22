@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c6mcmet5fcku" path="res://assets/fruits/white2_cherry2.png" id="3_c5vrv"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7yhlo"]
-bounce = 0.47
+bounce = 0.35
 
 [node name="PhysicsFruit" type="RigidBody2D" unique_id=1856154596]
 z_index = 1

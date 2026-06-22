@@ -469,6 +469,8 @@ func _on_done_meta_clicked(meta: Variant) -> void:
 			$person1.position = Vector2(-117, 250)
 		walking = true
 		generate_new_color()
+		$Thanks_Timer.stop()
+		thanking = false
 
 func _on_dump_meta_clicked(meta: Variant) -> void:
 	mouse_on_color_triangle = false
@@ -524,8 +526,13 @@ func select_random_fruit_color():
 
 
 func _on_thanks_timer_timeout() -> void:
-	thanking = false
-	_on_done_meta_clicked("Next")
+	print('w')
+	if walking == true and thanking == true and $Thanks_Timer.is_stopped():
+		$Thanks_Timer.start()
+	elif thanking == true:
+		$Thanks_Timer.stop()
+		thanking = false
+		_on_done_meta_clicked("Next")
 
 
 func _on_blender_button_mouse_entered() -> void:
