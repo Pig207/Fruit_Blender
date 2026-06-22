@@ -4,8 +4,9 @@ extends Control
 @export var fruit_count: int = 6
 @onready var pickup_zone = $PickupZone
 @onready var fruit_grid = $FruitGridContainer
-@onready var container_image = $Img/ContainerImg
-@onready var container_image2 = $Img/ContainerImgFruitless
+@onready var container_bottom = $Img/Container_Bottom
+@onready var container_top = $Img/Container_Top
+@onready var container_fruit = $Img/Container_All_Fruit
 @onready var container_img = $Img
 const PhysicsFruit = preload("res://scenes/physics_fruit.tscn")
 var _active_fruit = null
@@ -19,9 +20,9 @@ func _ready():
 	#_update_cursor()
 	
 	container_img.pivot_offset = container_img.size / 2 # offset for hover animation
-	container_image.pivot_offset = container_image.size / 2 # offset for hover animation
-	container_image2.pivot_offset = container_image2.size / 2 # offset for hover animation
-
+	container_fruit.pivot_offset = container_fruit.size / 2 # offset for hover animation
+	container_top.pivot_offset = container_top.size / 2 # offset for hover animation
+	container_bottom.pivot_offset = container_bottom.size / 2 # offset for hover animation
 '''
 func _update_cursor():
 	#print(get_parent().get_parent().ready_to_point_hand )
@@ -113,6 +114,9 @@ func _spawn_dragging_fruit(): # pick up fruit
 	fruit.source_container = self
 	fruit.position = get_global_mouse_position()
 	fruit.start_dragging()
+	if [1,2].pick_random() == 1:
+		fruit.get_node("FruitImage").flip_h = true
+		fruit.get_node("FruitImageStem").flip_h = true
 	get_tree().current_scene.add_child(fruit)
 	_active_fruit = fruit # set active fruit ref
 	_scale_image_down()
@@ -139,15 +143,20 @@ func setup(name: String, count: int): # init
 func _build_fruits(): # set fruit png
 	for child in fruit_grid.get_children():
 		child.queue_free()
-	if true:#fruit_name == "cherry":
-		#var texture = load("res://assets/fruits/" + fruit_name + "_container.png")
-		var texture = load("res://assets/fruits/white2_cherry_container1.png")
-		container_image.texture = texture
-		var texture2 = load("res://assets/fruits/white2_cherry_container2.png")
-		container_image2.texture = texture2
-		for i in fruit_list:
-			if i[0] == fruit_name:
-				container_image.modulate = i[1]
+	for i in container_fruit.get_children():
+		var texture = load("res://assets/fruits/fruit_" + fruit_name + "_white.png")
+		i.texture = texture
+		i.self_modulate = get_parent().get_parent().fruits_colors[fruit_name]
+		var texture2 = load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
+		i.get_node("Container_Stem_1").texture = texture2
+		#new_seed
+		if [1,2].pick_random() == 1:
+			i.flip_h = true
+			i.get_node("Container_Stem_1").flip_h = true
+		if fruit_name == "blueberry":
+			i.position.y += 10
+		#if fruit_name == "kale":
+		#	i.position.x += 2
 		
 	#else:
 	#	var texture = load("res://assets/container.png")

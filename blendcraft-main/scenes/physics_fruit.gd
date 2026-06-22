@@ -21,7 +21,7 @@ const THROW_ROTATION_FACTOR = 0.003   # rotation factor based on throw speed
 const DROP_ROTATION_FACTOR  = 1.2     # max rotation factor for dropping (rand in range)
 
 @onready var sprite            = $FruitImage
-@onready var sprite2            = $FruitImageStem
+@onready var sprite2           = $FruitImageStem
 @onready var fruit_hitbox      = $FruitHitbox
 @onready var settle_detector   = $BarCollisionDetector
 @onready var settle_shape      = $BarCollisionDetector/CollisionShape2D
@@ -37,8 +37,8 @@ func _ready():
 	mouse_entered.connect(_on_mouse_entered) # mouse hovering fruit
 	mouse_exited.connect(_on_mouse_exited) # mouse no longer hovering fruit 
 	#sprite.texture = load("res://assets/fruits/" + fruit_name + ".png")
-	sprite.texture = load("res://assets/fruits/white2_cherry.png")
-	sprite2.texture = load("res://assets/fruits/white2_cherry2.png")
+	sprite.texture = load("res://assets/fruits/fruit_" + fruit_name + "_white.png")
+	sprite2.texture = load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
 	#self.material = pulse_shader
 	#pulse_mat.set_shader_parameter("mode", 2)
 	#pulse_shader = load("res://scenes/color_target_pulse.gdshader")

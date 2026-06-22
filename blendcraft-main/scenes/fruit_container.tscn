@@ -1,11 +1,75 @@
 [gd_scene format=3 uid="uid://c3m88nr7pcpcq"]
 
 [ext_resource type="Script" uid="uid://dcwubofpxy0ga" path="res://scenes/fruit_container.gd" id="1_f5q2v"]
-[ext_resource type="Texture2D" uid="uid://ccxrixi1xvafi" path="res://assets/container.png" id="2_vexfo"]
-[ext_resource type="Texture2D" uid="uid://xj7eqm8qunxn" path="res://assets/fruits/white2_cherry_container2.png" id="3_pkklv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8kdca"]
 size = Vector2(106, 101)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sxl4m"]
+load_path = "res://.godot/imported/container_bottom.png-cc9eed3766904f65aa9583559c3ee5ec.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pkklv"]
+load_path = "res://.godot/imported/container_top.png-fea61409eeffef8d99a30e0e5cec77ca.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_v3nyw"]
+load_path = "res://.godot/imported/fruit_cherry_white.png-6526357c8575b53cbe9e1e11076aa508.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qi4o5"]
+load_path = "res://.godot/imported/fruit_cherry_stem.png-4c64d937f44a95dd1b90e757bf9070d8.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_k6w4a"]
+load_path = "res://.godot/imported/fruit_cherry_white.png-6526357c8575b53cbe9e1e11076aa508.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_vbmm1"]
+load_path = "res://.godot/imported/fruit_cherry_stem.png-4c64d937f44a95dd1b90e757bf9070d8.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6508m"]
+load_path = "res://.godot/imported/fruit_cherry_white.png-6526357c8575b53cbe9e1e11076aa508.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bapty"]
+load_path = "res://.godot/imported/fruit_cherry_stem.png-4c64d937f44a95dd1b90e757bf9070d8.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ouxng"]
+load_path = "res://.godot/imported/fruit_cherry_white.png-6526357c8575b53cbe9e1e11076aa508.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pshgj"]
+load_path = "res://.godot/imported/fruit_cherry_stem.png-4c64d937f44a95dd1b90e757bf9070d8.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3h557"]
+load_path = "res://.godot/imported/fruit_cherry_white.png-6526357c8575b53cbe9e1e11076aa508.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_olsi8"]
+load_path = "res://.godot/imported/fruit_cherry_stem.png-4c64d937f44a95dd1b90e757bf9070d8.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_vgqtd"]
+load_path = "res://.godot/imported/fruit_cherry_white.png-6526357c8575b53cbe9e1e11076aa508.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4y0sn"]
+load_path = "res://.godot/imported/fruit_cherry_stem.png-4c64d937f44a95dd1b90e757bf9070d8.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i781w"]
+load_path = "res://.godot/imported/fruit_cherry_white.png-6526357c8575b53cbe9e1e11076aa508.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0oe4p"]
+load_path = "res://.godot/imported/fruit_cherry_stem.png-4c64d937f44a95dd1b90e757bf9070d8.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_t7na2"]
+load_path = "res://.godot/imported/fruit_cherry_white.png-6526357c8575b53cbe9e1e11076aa508.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1orfp"]
+load_path = "res://.godot/imported/fruit_cherry_stem.png-4c64d937f44a95dd1b90e757bf9070d8.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3gcn4"]
+load_path = "res://.godot/imported/fruit_cherry_white.png-6526357c8575b53cbe9e1e11076aa508.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qr5yc"]
+load_path = "res://.godot/imported/fruit_cherry_stem.png-4c64d937f44a95dd1b90e757bf9070d8.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_u4g7q"]
+load_path = "res://.godot/imported/fruit_cherry_white.png-6526357c8575b53cbe9e1e11076aa508.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_irxef"]
+load_path = "res://.godot/imported/fruit_cherry_stem.png-4c64d937f44a95dd1b90e757bf9070d8.ctex"
 
 [node name="FruitContainer" type="Control" unique_id=1634576510]
 custom_minimum_size = Vector2(107.19, 88.105)
@@ -27,24 +91,355 @@ layout_mode = 0
 offset_right = 107.0
 offset_bottom = 94.0
 
-[node name="ContainerImg" type="TextureRect" parent="Img" unique_id=1904852982]
+[node name="Container_Bottom" type="TextureRect" parent="Img" unique_id=1904852982]
+texture_filter = 1
 layout_mode = 0
 offset_right = 107.0
 offset_bottom = 94.0
-texture = ExtResource("2_vexfo")
+texture = SubResource("CompressedTexture2D_sxl4m")
 
-[node name="ContainerImgFruitless" type="TextureRect" parent="Img" unique_id=190958057]
+[node name="Container_Top" type="TextureRect" parent="Img" unique_id=1612226442]
+z_index = 1
+texture_filter = 1
 layout_mode = 0
-offset_right = 107.0
-offset_bottom = 94.0
-texture = ExtResource("3_pkklv")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("CompressedTexture2D_pkklv")
+
+[node name="Container_All_Fruit" type="TextureRect" parent="Img" unique_id=2028434231]
+layout_mode = 0
+offset_top = -2.0
+offset_right = 40.0
+offset_bottom = 38.0
+
+[node name="Container_Fruit_0" type="TextureRect" parent="Img/Container_All_Fruit" unique_id=1113722658]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+offset_left = 28.0
+offset_top = -7.0
+offset_right = 49.0
+offset_bottom = 21.0
+rotation = -0.25307274
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+offset_transform_rotation = 0.20245819
+texture = SubResource("CompressedTexture2D_v3nyw")
+stretch_mode = 2
+
+[node name="Container_Stem_1" type="TextureRect" parent="Img/Container_All_Fruit/Container_Fruit_0" unique_id=874486862]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61200005
+anchor_right = 0.5
+anchor_bottom = 0.61200005
+offset_left = -10.5
+offset_top = -17.136002
+offset_right = 10.5
+offset_bottom = 10.863998
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_qi4o5")
+stretch_mode = 2
+
+[node name="Container_Fruit_1" type="TextureRect" parent="Img/Container_All_Fruit" unique_id=1903476756]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+offset_left = 57.999996
+offset_top = -5.999999
+offset_right = 79.0
+offset_bottom = 22.0
+rotation = -0.10646509
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+offset_transform_rotation = 0.20245819
+texture = SubResource("CompressedTexture2D_k6w4a")
+stretch_mode = 2
+
+[node name="Container_Stem_1" type="TextureRect" parent="Img/Container_All_Fruit/Container_Fruit_1" unique_id=1834377911]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61200005
+anchor_right = 0.5
+anchor_bottom = 0.61200005
+offset_left = -10.5
+offset_top = -17.136002
+offset_right = 10.5
+offset_bottom = 10.863998
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_vbmm1")
+stretch_mode = 2
+
+[node name="Container_Fruit_2" type="TextureRect" parent="Img/Container_All_Fruit" unique_id=807467986]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+offset_left = 42.0
+offset_top = 3.9999998
+offset_right = 63.0
+offset_bottom = 32.0
+rotation = -0.10646509
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_6508m")
+stretch_mode = 2
+
+[node name="Container_Stem_1" type="TextureRect" parent="Img/Container_All_Fruit/Container_Fruit_2" unique_id=2016225307]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61200005
+anchor_right = 0.5
+anchor_bottom = 0.61200005
+offset_left = -10.5
+offset_top = -17.136002
+offset_right = 10.5
+offset_bottom = 10.863998
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_bapty")
+stretch_mode = 2
+
+[node name="Container_Fruit_3" type="TextureRect" parent="Img/Container_All_Fruit" unique_id=534279065]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+offset_left = 64.0
+offset_top = 11.999998
+offset_right = 85.0
+offset_bottom = 40.0
+rotation = -0.075049154
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_ouxng")
+stretch_mode = 2
+
+[node name="Container_Stem_1" type="TextureRect" parent="Img/Container_All_Fruit/Container_Fruit_3" unique_id=703904525]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61200005
+anchor_right = 0.5
+anchor_bottom = 0.61200005
+offset_left = -10.5
+offset_top = -17.136002
+offset_right = 10.5
+offset_bottom = 10.863998
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_pshgj")
+stretch_mode = 2
+
+[node name="Container_Fruit_4" type="TextureRect" parent="Img/Container_All_Fruit" unique_id=557025355]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+offset_left = 22.0
+offset_top = 12.0
+offset_right = 43.0
+offset_bottom = 40.0
+rotation = 0.08726646
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_3h557")
+stretch_mode = 2
+
+[node name="Container_Stem_1" type="TextureRect" parent="Img/Container_All_Fruit/Container_Fruit_4" unique_id=1909760356]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61200005
+anchor_right = 0.5
+anchor_bottom = 0.61200005
+offset_left = -10.5
+offset_top = -17.136002
+offset_right = 10.5
+offset_bottom = 10.863998
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_olsi8")
+stretch_mode = 2
+
+[node name="Container_Fruit_5" type="TextureRect" parent="Img/Container_All_Fruit" unique_id=413938854]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+offset_left = 54.0
+offset_top = 20.0
+offset_right = 75.0
+offset_bottom = 48.0
+rotation = -0.31939524
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_vgqtd")
+stretch_mode = 2
+
+[node name="Container_Stem_1" type="TextureRect" parent="Img/Container_All_Fruit/Container_Fruit_5" unique_id=1593261095]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61200005
+anchor_right = 0.5
+anchor_bottom = 0.61200005
+offset_left = -10.5
+offset_top = -17.136002
+offset_right = 10.5
+offset_bottom = 10.863998
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_4y0sn")
+stretch_mode = 2
+
+[node name="Container_Fruit_6" type="TextureRect" parent="Img/Container_All_Fruit" unique_id=838831581]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+offset_left = 32.0
+offset_top = 22.0
+offset_right = 53.0
+offset_bottom = 50.0
+rotation = 0.27401668
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_i781w")
+stretch_mode = 2
+
+[node name="Container_Stem_1" type="TextureRect" parent="Img/Container_All_Fruit/Container_Fruit_6" unique_id=1208505918]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61200005
+anchor_right = 0.5
+anchor_bottom = 0.61200005
+offset_left = -10.5
+offset_top = -17.136002
+offset_right = 10.5
+offset_bottom = 10.863998
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_0oe4p")
+stretch_mode = 2
+
+[node name="Container_Fruit_7" type="TextureRect" parent="Img/Container_All_Fruit" unique_id=1003368526]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+offset_left = 66.0
+offset_top = 35.0
+offset_right = 87.0
+offset_bottom = 63.0
+rotation = -0.42586035
+scale = Vector2(1.9999965, 1.9999965)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_t7na2")
+stretch_mode = 2
+
+[node name="Container_Stem_1" type="TextureRect" parent="Img/Container_All_Fruit/Container_Fruit_7" unique_id=822783909]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61200005
+anchor_right = 0.5
+anchor_bottom = 0.61200005
+offset_left = -10.5
+offset_top = -17.136002
+offset_right = 10.5
+offset_bottom = 10.863998
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_1orfp")
+stretch_mode = 2
+
+[node name="Container_Fruit_8" type="TextureRect" parent="Img/Container_All_Fruit" unique_id=1613736517]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+offset_left = 19.0
+offset_top = 32.0
+offset_right = 40.0
+offset_bottom = 60.0
+rotation = 0.25307274
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_3gcn4")
+stretch_mode = 2
+
+[node name="Container_Stem_1" type="TextureRect" parent="Img/Container_All_Fruit/Container_Fruit_8" unique_id=1636745086]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61200005
+anchor_right = 0.5
+anchor_bottom = 0.61200005
+offset_left = -10.5
+offset_top = -17.136002
+offset_right = 10.5
+offset_bottom = 10.863998
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_qr5yc")
+stretch_mode = 2
+
+[node name="Container_Fruit_9" type="TextureRect" parent="Img/Container_All_Fruit" unique_id=537717759]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+offset_left = 42.0
+offset_top = 38.0
+offset_right = 63.0
+offset_bottom = 66.0
+rotation = -0.17278759
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_u4g7q")
+stretch_mode = 2
+
+[node name="Container_Stem_1" type="TextureRect" parent="Img/Container_All_Fruit/Container_Fruit_9" unique_id=725683684]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61200005
+anchor_right = 0.5
+anchor_bottom = 0.61200005
+offset_left = -10.5
+offset_top = -17.136002
+offset_right = 10.5
+offset_bottom = 10.863998
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
+texture = SubResource("CompressedTexture2D_irxef")
+stretch_mode = 2
 
 [node name="FruitGridContainer" type="GridContainer" parent="." unique_id=504759824]
 layout_mode = 0
 offset_left = 22.0
-offset_top = 13.0
-offset_right = 98.0
-offset_bottom = 73.0
+offset_top = 23.0
+offset_right = 84.57669
+offset_bottom = 70.73006
 scale = Vector2(0.815, 0.815)
 mouse_filter = 2
 columns = 3

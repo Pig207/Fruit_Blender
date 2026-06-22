@@ -8,14 +8,17 @@
 bounce = 0.47
 
 [node name="PhysicsFruit" type="RigidBody2D" unique_id=1856154596]
+z_index = 1
 physics_material_override = SubResource("PhysicsMaterial_7yhlo")
 script = ExtResource("1_s6g34")
 
 [node name="FruitImage" type="Sprite2D" parent="." unique_id=1198462312]
+texture_filter = 1
 scale = Vector2(2, 2)
 texture = ExtResource("2_gwdcn")
 
 [node name="FruitImageStem" type="Sprite2D" parent="." unique_id=1659709138]
+texture_filter = 1
 scale = Vector2(2, 2)
 texture = ExtResource("3_c5vrv")
 

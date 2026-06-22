@@ -68,6 +68,7 @@ var people_bob_height: float = 15.0    # How high the bounce goes
 var people_list = [$person1, $person2]
 
 func _ready():
+	randomize()
 	apply_fonts()
 	start_game()
 	
