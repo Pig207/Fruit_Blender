@@ -39,18 +39,32 @@ func _ready():
 	#sprite.texture = load("res://assets/fruits/" + fruit_name + ".png")
 	sprite.texture = load("res://assets/fruits/white2_cherry.png")
 	sprite2.texture = load("res://assets/fruits/white2_cherry2.png")
-	for i in fruit_list:
-		if i[0] == fruit_name:
-			sprite.modulate = i[1]
+	#self.material = pulse_shader
+	#pulse_mat.set_shader_parameter("mode", 2)
+	#pulse_shader = load("res://scenes/color_target_pulse.gdshader")
+	#pulse_mat = get_parent().get_node("Color_Triangle/Triangle/" + fruit_name).material# as ShaderMaterial
+	#pulse_mat.shader = pulse_shader
+	#for i in fruit_list:
+	#	if i[0] == fruit_name:
+	#get_parent().fruits_colors[fruit_name]
+	sprite.modulate = get_parent().fruits_colors[fruit_name]
 	_apply_hitbox_shapes()
 
 func _on_mouse_entered(): # set clicky cursor hovering fruit
 	if not is_dragging:
 		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
+		#var target = get_parent().get_node("Color_Triangle/Triangle/" + fruit_name)
+		#var color = get_parent().fruits_colors[fruit_name]
+		#get_parent().darken_target(target, color, 1.0)
+		#target.material.set_shader_parameter("mode", 1)
 
 func _on_mouse_exited(): # reset cursor leaving fruit
 	if not is_dragging:
+		if get_parent():
+			if get_parent().mouse_on_color_triangle == true:
+				return
 		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+		
 
 func _input_event(_viewport, event, _shape_idx): # pick up fruit (off ground/midair etc)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -61,6 +75,10 @@ func _input_event(_viewport, event, _shape_idx): # pick up fruit (off ground/mid
 func start_dragging(): # start holding fruit in mouse
 	is_dragging = true
 	freeze = true
+	if get_parent():
+		get_parent().hands_full = is_dragging
+		get_parent().update_shader_mode(1, fruit_name, true)
+		#get_parent().get_node("Color_Triangle/Triangle/" + fruit_name).material.set_shader_parameter("mode", 1.0)
 	linear_velocity  = Vector2.ZERO
 	angular_velocity = 0
 	mouse_velocity_history.clear()
@@ -93,10 +111,10 @@ func _process(delta):
 			mouse_velocity_history.pop_front()
 		last_mouse_pos = mouse_pos
 
-		if Input.is_action_just_released("click"):
+		if Input.is_action_just_released("left_click"):
 			_release()
-	if Input.is_action_just_released("r"):
-		queue_free()
+	#if Input.is_action_just_released("r"):
+	#	queue_free()
 
 # test what amt of desired motion is allowed based on where barriers are
 func _test_motion_against_barriers(motion: Vector2) -> Vector2:
@@ -134,6 +152,15 @@ func _test_motion_against_barriers(motion: Vector2) -> Vector2:
 func _release(): # apply release velocity&rotation to fruit
 	is_dragging      = false
 	freeze           = false
+	if get_parent():
+		get_parent().hands_full = is_dragging
+		print(str(get_parent().last_container_hover))
+		if get_parent().last_container_hover != null:
+			get_parent().last_container_hover._on_mouse_entered()
+		else:
+			get_parent().update_shader_mode(0, fruit_name)
+			
+		#get_parent().get_node("Color_Triangle/Triangle/" + fruit_name).material.set_shader_parameter("mode", 0.0)
 
 	var throw_velocity = _calculate_throw_velocity()
 
@@ -169,7 +196,7 @@ func _on_entered_container_zone(area): # add fruit back to container when it lan
 			var container = area.get_parent()
 			if container.fruit_name == fruit_name:
 				container.add_one_fruit()
-				Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+				#Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 				queue_free()
 
 

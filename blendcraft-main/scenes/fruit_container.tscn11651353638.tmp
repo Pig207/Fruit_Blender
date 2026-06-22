@@ -22,21 +22,16 @@ priority = 5
 position = Vector2(55, 46.5)
 shape = SubResource("RectangleShape2D_8kdca")
 
-[node name="Img" type="TextureRect" parent="." unique_id=1946991794]
+[node name="ContainerImg" type="TextureRect" parent="." unique_id=1904852982]
 layout_mode = 0
-offset_right = 107.0
-offset_bottom = 94.0
-
-[node name="ContainerImg" type="TextureRect" parent="Img" unique_id=1904852982]
-layout_mode = 0
-offset_right = 107.0
-offset_bottom = 94.0
+offset_right = 40.0
+offset_bottom = 40.0
 texture = ExtResource("2_vexfo")
 
-[node name="ContainerImgFruitless" type="TextureRect" parent="Img" unique_id=190958057]
+[node name="ContainerImgFruitless" type="TextureRect" parent="." unique_id=190958057]
 layout_mode = 0
-offset_right = 107.0
-offset_bottom = 94.0
+offset_right = 40.0
+offset_bottom = 40.0
 texture = ExtResource("3_pkklv")
 
 [node name="FruitGridContainer" type="GridContainer" parent="." unique_id=504759824]
@@ -67,3 +62,6 @@ layout_mode = 2
 
 [node name="Fruit6" type="TextureRect" parent="FruitGridContainer" unique_id=1060075405]
 layout_mode = 2
+
+[connection signal="mouse_entered" from="PickupZone" to="." method="_on_pickup_zone_mouse_entered"]
+[connection signal="mouse_exited" from="PickupZone" to="." method="_on_pickup_zone_mouse_exited"]

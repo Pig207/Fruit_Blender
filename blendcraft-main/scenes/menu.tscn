@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://bhcshtr24he6"]
+
+[node name="Menu" type="Node2D" unique_id=158231325]
+z_index = 20
+
+[node name="Main_Label" type="Label" parent="." unique_id=302982396]
+texture_filter = 1
+offset_top = -73.0
+offset_right = 1152.0
+offset_bottom = 396.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 12
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 210
+text = "BlendCraft"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sub_Label2" type="Label" parent="." unique_id=646761154]
+texture_filter = 1
+offset_top = 187.0
+offset_right = 1152.0
+offset_bottom = 387.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 21
+text = "also known as Jamba Hues
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sub_Label" type="Label" parent="." unique_id=1704360964]
+texture_filter = 1
+offset_top = 308.0
+offset_right = 1152.0
+offset_bottom = 539.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 84
+text = "click to start"
+horizontal_alignment = 1
+vertical_alignment = 1

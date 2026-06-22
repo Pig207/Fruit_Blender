@@ -1,6 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://duj4bma2ai5r"]
+[gd_scene format=3 uid="uid://duj4bma2ai5r"]
 
 [ext_resource type="Script" uid="uid://ccsrol7ftu23k" path="res://scenes/craft.gd" id="1_tj1xu"]
+[ext_resource type="PackedScene" uid="uid://bhcshtr24he6" path="res://scenes/menu.tscn" id="2_a8bng"]
 [ext_resource type="Texture2D" uid="uid://b0wqheve04ddi" path="res://assets/craft3_front.png" id="2_gw37t"]
 [ext_resource type="Texture2D" uid="uid://cfiqctn7pwckb" path="res://assets/craft3_back.png" id="3_247wb"]
 [ext_resource type="Texture2D" uid="uid://7deat2diqf2l" path="res://assets/blendernolid.png" id="3_alos5"]
@@ -23,7 +24,7 @@ absorbent = true
 size = Vector2(1185.25, 239.5)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_sccp2"]
-bounce = 0.05
+bounce = 0.03
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fv520"]
 size = Vector2(72, 2476.5)
@@ -31,56 +32,59 @@ size = Vector2(72, 2476.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sccp2"]
 size = Vector2(106, 2435.5)
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" unique_id=991552635]
 script = ExtResource("1_tj1xu")
 
-[node name="Craft" type="Sprite2D" parent="."]
+[node name="Menu" parent="." unique_id=158231325 instance=ExtResource("2_a8bng")]
+visible = false
+
+[node name="Craft" type="Sprite2D" parent="." unique_id=1344590241]
 position = Vector2(574, 319)
 scale = Vector2(0.615278, 0.501493)
 texture = ExtResource("2_gw37t")
 
-[node name="Craft_Back" type="Sprite2D" parent="."]
+[node name="Craft_Back" type="Sprite2D" parent="." unique_id=146404455]
 z_index = -30
 position = Vector2(574, 319)
 scale = Vector2(0.615278, 0.501493)
 texture = ExtResource("3_247wb")
 
-[node name="Blendernolid" type="Sprite2D" parent="."]
+[node name="Blendernolid" type="Sprite2D" parent="." unique_id=351956563]
 z_index = 5
 position = Vector2(1037, 305)
 scale = Vector2(0.519043, 0.519043)
 texture = ExtResource("3_alos5")
 
-[node name="BlenderCollision" type="StaticBody2D" parent="Blendernolid" groups=["dragging_barriers"]]
+[node name="BlenderCollision" type="StaticBody2D" parent="Blendernolid" unique_id=1972682508 groups=["dragging_barriers"]]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blendernolid/BlenderCollision"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blendernolid/BlenderCollision" unique_id=668685449]
 build_mode = 1
 polygon = PackedVector2Array(-154.13, -204.222, -134.864, -196.515, -100.184, 55.8721, -117.524, 55.8721, -134.864, 221.562, -129.084, 235.048, 86.6979, 231.195, 96.3312, 221.562, 78.9916, 57.7987, 59.7252, 53.9454, 94.4044, -196.515, 115.597, -204.222, 115.597, -204.222, 94.4044, -196.515, 59.7252, 55.8721, 78.9916, 57.7987, -102.111, 57.7987, -134.864, -198.442)
 
-[node name="BlenderGlass" type="Sprite2D" parent="Blendernolid"]
+[node name="BlenderGlass" type="Sprite2D" parent="Blendernolid" unique_id=1243078372]
 z_index = -5
 texture = ExtResource("4_sccp2")
 
-[node name="BlenderFull" type="Sprite2D" parent="Blendernolid"]
+[node name="BlenderFull" type="Sprite2D" parent="Blendernolid" unique_id=511536716]
 z_index = -5
 position = Vector2(1.92666, 6.74313)
 scale = Vector2(1.08372, 0.997178)
 texture = ExtResource("6_247wb")
 
-[node name="DetectFruit" type="Area2D" parent="Blendernolid"]
+[node name="DetectFruit" type="Area2D" parent="Blendernolid" unique_id=14561833]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blendernolid/DetectFruit"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blendernolid/DetectFruit" unique_id=751969890]
 polygon = PackedVector2Array(-134.864, -198.442, -134.864, -198.442, 94.4045, -196.515, 57.7986, 57.7987, -100.184, 57.7987)
 
-[node name="Blender_Button" type="Area2D" parent="Blendernolid"]
+[node name="Blender_Button" type="Area2D" parent="Blendernolid" unique_id=747116249]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Blendernolid/Blender_Button"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blendernolid/Blender_Button" unique_id=203949449]
 position = Vector2(-25.0461, 148.35)
 shape = SubResource("CircleShape2D_247wb")
 
-[node name="ContainerArea" type="Area2D" parent="."]
+[node name="ContainerArea" type="Area2D" parent="." unique_id=263669050]
 
-[node name="GridOfContainers" type="GridContainer" parent="."]
+[node name="GridOfContainers" type="GridContainer" parent="." unique_id=7902934]
 offset_left = 7.0
 offset_top = 341.0
 offset_right = 884.0
@@ -89,44 +93,46 @@ size_flags_vertical = 3
 mouse_filter = 2
 columns = 6
 
-[node name="BarSurface" type="StaticBody2D" parent="." groups=["dragging_barriers", "settle_line"]]
+[node name="BarSurface" type="StaticBody2D" parent="." unique_id=989465510 groups=["dragging_barriers", "settle_line"]]
 physics_material_override = SubResource("PhysicsMaterial_eypww")
 
-[node name="BarCollision" type="CollisionShape2D" parent="BarSurface" groups=["dragging_barriers"]]
+[node name="BarCollision" type="CollisionShape2D" parent="BarSurface" unique_id=1131814480 groups=["dragging_barriers"]]
 position = Vector2(579.375, 554.75)
 shape = SubResource("RectangleShape2D_vwgb8")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["bounce2", "dragging_barriers"]]
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=318742561 groups=["bounce2", "dragging_barriers"]]
 physics_material_override = SubResource("PhysicsMaterial_sccp2")
 
-[node name="LeftWall" type="CollisionShape2D" parent="StaticBody2D" groups=["bounce2", "dragging_barriers"]]
+[node name="LeftWall" type="CollisionShape2D" parent="StaticBody2D" unique_id=1918260465 groups=["bounce2", "dragging_barriers"]]
 position = Vector2(-36, -730.75)
 shape = SubResource("RectangleShape2D_fv520")
 
-[node name="RightWall" type="CollisionShape2D" parent="StaticBody2D" groups=["bounce2", "dragging_barriers"]]
+[node name="RightWall" type="CollisionShape2D" parent="StaticBody2D" unique_id=164707781 groups=["bounce2", "dragging_barriers"]]
 position = Vector2(1205, -783.25)
 shape = SubResource("RectangleShape2D_sccp2")
 
-[node name="Percent_Correct" type="Label" parent="."]
-offset_left = -17.0
-offset_top = 425.0
+[node name="UI_Labels" type="Node2D" parent="." unique_id=65804533]
+
+[node name="Percent_Correct" type="Label" parent="UI_Labels" unique_id=1646285110]
+offset_left = 896.0
+offset_top = 73.0
 offset_right = 1165.0
 offset_bottom = 556.0
 theme_override_font_sizes/font_size = 84
 text = "0%"
 horizontal_alignment = 1
 
-[node name="Blender_Size" type="Label" parent="."]
+[node name="Blender_Size" type="Label" parent="UI_Labels" unique_id=1353466138]
 texture_filter = 1
 offset_left = 991.0
-offset_top = 426.0
+offset_top = 433.0
 offset_right = 1062.0
-offset_bottom = 484.0
+offset_bottom = 491.0
 theme_override_font_sizes/font_size = 42
 text = "0"
 horizontal_alignment = 1
 
-[node name="Points" type="Label" parent="."]
+[node name="Points" type="Label" parent="UI_Labels" unique_id=1975695941]
 offset_left = 10.0
 offset_top = 580.0
 offset_right = 152.0
@@ -134,7 +140,7 @@ offset_bottom = 638.0
 theme_override_font_sizes/font_size = 42
 text = "1"
 
-[node name="Done" type="RichTextLabel" parent="."]
+[node name="Done" type="RichTextLabel" parent="UI_Labels" unique_id=2079644187]
 offset_left = 9.0
 offset_right = 167.0
 offset_bottom = 63.0
@@ -144,7 +150,7 @@ text = "Next"
 meta_underlined = false
 hint_underlined = false
 
-[node name="Dump" type="RichTextLabel" parent="."]
+[node name="Dump" type="RichTextLabel" parent="UI_Labels" unique_id=1148986248]
 offset_left = 1018.0
 offset_right = 1152.0
 offset_bottom = 63.0
@@ -154,13 +160,13 @@ text = "Dump"
 meta_underlined = false
 hint_underlined = false
 
-[node name="Request" type="Sprite2D" parent="."]
+[node name="Request" type="Sprite2D" parent="." unique_id=266760870]
 z_index = -4
 position = Vector2(743, 112)
 scale = Vector2(0.112625, 0.113885)
 texture = ExtResource("7_247wb")
 
-[node name="Request_Label" type="Label" parent="."]
+[node name="Request_Label" type="Label" parent="." unique_id=569967658]
 z_index = -3
 texture_filter = 1
 offset_left = 658.0
@@ -173,37 +179,46 @@ text = "Small ( 2 )"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="person1" type="Sprite2D" parent="."]
+[node name="person1" type="Sprite2D" parent="." unique_id=1491758819]
 visible = false
+light_mask = 2
+visibility_layer = 2
 z_index = -10
 position = Vector2(-117, 232)
 texture = ExtResource("6_nxr8o")
 
-[node name="person2" type="Sprite2D" parent="."]
+[node name="person2" type="Sprite2D" parent="." unique_id=958852531]
 visible = false
+light_mask = 2
+visibility_layer = 2
 z_index = -10
 position = Vector2(1365, 251)
 texture = ExtResource("8_whde3")
 
-[node name="Thanks_Timer" type="Timer" parent="."]
+[node name="Thanks_Timer" type="Timer" parent="." unique_id=1065072897]
 one_shot = true
 
-[node name="Snappy_Timer" type="Timer" parent="."]
+[node name="Snappy_Timer" type="Timer" parent="." unique_id=1003707583]
 wait_time = 1.5
 one_shot = true
 
-[node name="Color Triangle" type="Node2D" parent="."]
+[node name="Color_Triangle" type="Node2D" parent="." unique_id=685525907]
+modulate = Color(1, 1, 1, 0.33333334)
 
-[node name="Triangle" type="Sprite2D" parent="Color Triangle"]
+[node name="Area2D" type="Area2D" parent="Color_Triangle" unique_id=1601380947]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Color_Triangle/Area2D" unique_id=161731210]
+polygon = PackedVector2Array(330, 297, 174, 27, 18, 297)
+
+[node name="Triangle" type="Sprite2D" parent="Color_Triangle" unique_id=2110524173]
 z_index = -20
 texture_filter = 1
 position = Vector2(174, 163)
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("10_7i7uc")
 
-[node name="Target" type="Sprite2D" parent="Color Triangle/Triangle"]
-modulate = Color(0, 0, 0, 1)
-texture_filter = 1
+[node name="Target" type="Sprite2D" parent="Color_Triangle/Triangle" unique_id=718471436]
+z_index = 1
 position = Vector2(0, 63)
 scale = Vector2(2.8, 2.8)
 texture = ExtResource("11_a8bng")
@@ -212,7 +227,9 @@ texture = ExtResource("11_a8bng")
 [connection signal="body_exited" from="Blendernolid/DetectFruit" to="." method="_on_detect_fruit_body_exited"]
 [connection signal="mouse_entered" from="Blendernolid/Blender_Button" to="." method="_on_blender_button_mouse_entered"]
 [connection signal="mouse_exited" from="Blendernolid/Blender_Button" to="." method="_on_blender_button_mouse_exited"]
-[connection signal="meta_clicked" from="Done" to="." method="_on_done_meta_clicked"]
-[connection signal="meta_clicked" from="Dump" to="." method="_on_dump_meta_clicked"]
+[connection signal="meta_clicked" from="UI_Labels/Done" to="." method="_on_done_meta_clicked"]
+[connection signal="meta_clicked" from="UI_Labels/Dump" to="." method="_on_dump_meta_clicked"]
 [connection signal="timeout" from="Thanks_Timer" to="." method="_on_thanks_timer_timeout"]
 [connection signal="timeout" from="Snappy_Timer" to="." method="_on_snappy_timer_timeout"]
+[connection signal="mouse_entered" from="Color_Triangle/Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Color_Triangle/Area2D" to="." method="_on_area_2d_mouse_exited"]

@@ -8,6 +8,13 @@ var fruits: Dictionary = {
 	"strawberry": 4,
 	"banana": 4
 }
+var fruits_colors: Dictionary = {
+	"cherry": Color("#ff0000"),
+	"kale": Color("#00ff00"),
+	"blueberry": Color("#0000ff"),
+	"strawberry": Color("#ffa3cb"),
+	"banana": Color("#fff563")
+}
 var in_blender = []
 var blended_fruits = []
 var maximize_brightness = true #change to false for old mode
@@ -24,6 +31,16 @@ var mouse_on_blender_button = false
 var total_smoothie_count = 0
 var snappyfied = false
 var triangle_corners
+var on_main_menu = true
+var entities_list = []
+var mouse_on_color_triangle = false
+var color_triangle_toggled_on = false
+var hands_full = false
+var ready_to_point_hand = false
+var ready_to_point_hand_special = null
+var shaders_to_update = []
+var last_container_hover = null
+var all_text_nodes = []
 
 # da blenda animation
 # Configuration variables
@@ -43,43 +60,38 @@ var is_dumping: bool = false
 @onready var base_scale_y2: float = 0.519043
 
 @onready var fruit_slot_area = $GridOfContainers  # your HBoxContainer
-
 const FruitContainer = preload("res://scenes/fruit_container.tscn")
 
+var people_speed: float = 3.0
+#var people_bob_speed: float = 12.0     # How fast it steps up and down
+var people_bob_height: float = 15.0    # How high the bounce goes
+var people_list = [$person1, $person2]
+
 func _ready():
-	in_blender = []
-	blended_fruits = []
-	$Thanks_Timer.stop()
-	$Snappy_Timer.stop()
-	total_smoothie_count = 0
-	$Points.text = str(total_smoothie_count-1)
-	$Percent_Correct.text = "0%"
-	$Blender_Size.text = "0"
-	generate_new_color()
-	_build_fruit_containers(["cherry", "kale", "blueberry"])
-	$Blendernolid/BlenderFull.modulate = Color("#ffffff00")
-	$Request.modulate = Color("#ffffff00")
-	$Request_Label.visible = false
-	setup_Done()
-	setup_Dump()
-	setup_people()
-	triangle_corners = get_corner_positions()
-	#print(triangle_corners)
-	#get_node("Color Triangle/Triangle/Target").position = set_target_on_triangle(current_blend_color)
-	get_node("Color Triangle/Triangle/Target").position = set_target_on_triangle(Color("#ffffff"))
+	apply_fonts()
+	start_game()
 	
-func _physics_process(delta: float) -> void:
-	var speed: float = 3.0
-	var bob_speed: float = 12.0     # How fast it steps up and down
-	var bob_height: float = 15.0    # How high the bounce goes
-	var people = [$person1, $person2]
+func _physics_process(delta: float):
+	#print(ready_to_point_hand)
+	update_shaders(delta)
+	if on_main_menu == true:
+		if Input.is_action_just_released("either_click"):
+			$Menu.visible = false
+			$UI_Labels.visible = true
+			on_main_menu = false
+			if ready_to_point_hand == true:
+				#ready_to_point_hand = false
+				Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
+			if ready_to_point_hand_special != null:
+				ready_to_point_hand_special.point(true)
+				#ready_to_point_hand_special = null
+			#start_game()
+		return
 	if walking == true:
-		if people[waiting_to_walk].position.x < 570:
-			for p in people:
-				p.position.x += speed
-				# The Math trick: abs(sin()) creates the hard floor impact and smooth top
-				var bounce = abs(sin(p.position.x)) * bob_height
-				# Subtract bounce because in 2D, negative Y is UP
+		if people_list[waiting_to_walk].position.x < 570:
+			for p in people_list:
+				p.position.x += people_speed
+				var bounce = abs(sin(p.position.x)) * people_bob_height
 				p.position.y = 250 - bounce
 		else:
 			walking = false
@@ -89,10 +101,28 @@ func _physics_process(delta: float) -> void:
 			if total_smoothie_count == 3 and $Snappy_Timer.is_stopped():
 				$Snappy_Timer.start()
 			
-	if Input.is_action_just_released("click") and mouse_on_blender_button == true:
-		start_blending()
-		blend()
-	if Input.is_action_just_released("r"):
+	if Input.is_action_just_pressed("left_click"):
+		if mouse_on_blender_button == true:
+			mouse_on_color_triangle = false
+			start_blending()
+			blend()
+		elif mouse_on_color_triangle == true and hands_full == false:
+			if color_triangle_toggled_on == false:
+				color_triangle_toggled_on = true
+				$Color_Triangle.modulate = Color("#ffffff")
+			else:
+				color_triangle_toggled_on = false
+				$Color_Triangle.modulate = Color("#ffffff3c")#Color("ffffff78")
+	
+	if Input.is_action_just_pressed("r"):
+		for ent in entities_list:
+			if ent:
+				#print(ent.name)
+				#if ent.has_method("_release"):
+				#	if ent.is_dragging == true:
+				ent.queue_free()
+				
+		entities_list = []
 		_ready()
 		
 	if is_blending:
@@ -141,6 +171,37 @@ func _physics_process(delta: float) -> void:
 			
 			# 3. Apply the single compression stroke
 			$Blendernolid.scale.y = base_scale_y2 - (squash_factor * max_compress2)
+	
+func start_game():
+	on_main_menu = true
+	$Menu.visible = true
+	$UI_Labels.visible = false
+	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+	
+	shaders_to_update = []
+	in_blender = []
+	blended_fruits = []
+	$Thanks_Timer.stop()
+	$Snappy_Timer.stop()
+	total_smoothie_count = 0
+	$UI_Labels/Points.text = str(total_smoothie_count-1)
+	$UI_Labels/Percent_Correct.text = "0%"
+	$UI_Labels/Percent_Correct.visible = false
+	$UI_Labels/Blender_Size.text = "0"
+	people_list = [$person1, $person2]
+	triangle_corners = get_corner_positions()
+	generate_new_color()
+	_build_fruit_containers(["blueberry", "kale", "cherry"])
+	$Blendernolid/BlenderFull.modulate = Color("#ffffff00")
+	$Request.modulate = Color("#ffffff00")
+	$Request_Label.visible = false
+	setup_Done()
+	setup_Dump()
+	setup_people()
+	get_node("Color_Triangle/Triangle/Target").position = set_target_on_triangle(Color("#ffffff"))
+	$Color_Triangle.modulate = Color("#ffffff3c")
+	if ready_to_point_hand_special != null:
+		ready_to_point_hand_special.point(false)
 
 # add all the fruits in a given fruit dish to the grid container
 func _build_fruit_containers(arra):
@@ -150,6 +211,60 @@ func _build_fruit_containers(arra):
 		var container = FruitContainer.instantiate()
 		fruit_slot_area.add_child(container)
 		container.setup(fruit_name, fruits[fruit_name])
+		entities_list.append(container)
+		
+		var central_target = $Color_Triangle/Triangle/Target
+		#for i in fruit_list:
+		#	if i[0] == fruit_name:
+		#fruits_colors[fruit_name]
+				#print(i[0])
+		var color_target = central_target.duplicate()
+		$Color_Triangle/Triangle.add_child(color_target)
+		color_target.position = set_target_on_triangle(fruits_colors[fruit_name])
+		entities_list.append(color_target)
+		#color_target.modulate = Color(i[1]).darkened(0.5)
+		darken_target(color_target, fruits_colors[fruit_name], 0.7)
+		color_target.z_index -= 1
+		color_target.name = fruit_name
+		
+		var pulse_mat = ShaderMaterial.new()
+		pulse_mat.shader = load("res://scenes/color_target_pulse.gdshader")
+		color_target.material = pulse_mat
+		color_target.material.set_shader_parameter("mode", 0.0)
+		color_target.material.set_shader_parameter("shine_color", (fruits_colors[fruit_name].lightened(0.9)))
+		#material.set_shader_parameter("mode", 0.0)
+		shaders_to_update.append([color_target, 0.0, 0.0, 6, fruit_name, 0.0])
+				
+func update_shader_mode(new_mode, name_fruit, reset_time = false):
+	for shader_target in shaders_to_update:
+		if shader_target[4] == name_fruit:
+			if shader_target[2] != float(new_mode):
+				shader_target[2] = float(new_mode)
+				#shader_target[0].material.set_shader_parameter("mode", float(new_mode))
+				if reset_time == true:
+					shader_target[5] = 1.0
+				
+func update_shaders(delta):
+	for shader_target in shaders_to_update:
+		var current_mode_blend = shader_target[1]
+		var target_mode = shader_target[2]
+		var transition_speed = shader_target[3]
+		shader_target[5] += delta
+		shader_target[0].material.set_shader_parameter("custom_time", shader_target[5])
+		
+		if current_mode_blend != target_mode:
+		
+			
+			# Smoothly slide the value toward the target mode
+			current_mode_blend = move_toward(current_mode_blend, target_mode, transition_speed * delta)
+			
+			# Send the updated float to the shader
+			#print(current_mode_blend)
+			shader_target[1] = current_mode_blend
+			shader_target[0].material.set_shader_parameter("mode", current_mode_blend)
+				
+func darken_target(target, color, darkness):
+	target.modulate = color.darkened(darkness)
 
 func _on_detect_fruit_body_entered(body: Node2D) -> void:
 	in_blender.append(body)
@@ -195,10 +310,11 @@ func blend():
 		
 		percentage_similarity = (get_color_similarity(current_blend_color, target_color))
 		if percentage_similarity < 10:
-			$Percent_Correct.text = "%01d" % [percentage_similarity] + "%"
+			$UI_Labels/Percent_Correct.text = "%01d" % [percentage_similarity] + "%"
 		else:
-			$Percent_Correct.text = "%02d" % [percentage_similarity] + "%"
-		$Blender_Size.text = str(len(blended_fruits))
+			$UI_Labels/Percent_Correct.text = "%02d" % [percentage_similarity] + "%"
+		$UI_Labels/Percent_Correct.visible = true
+		$UI_Labels/Blender_Size.text = str(len(blended_fruits))
 		if percentage_similarity == 100.0 and ((len(blended_fruits)) >= current_size[1]) and $Thanks_Timer.is_stopped() == true:
 			$Thanks_Timer.start()
 			#$Request.modulate = target_color
@@ -207,15 +323,14 @@ func blend():
 				$Request_Label.text = ["Thanks!", "Thank you!", "Perfect!"].pick_random()
 			else:
 				$Request_Label.text = ["Thanks!", "Thank you!", "About time...", "Perfect!"].pick_random()
-	get_node("Color Triangle/Triangle/Target").position = set_target_on_triangle(current_blend_color)
+	get_node("Color_Triangle/Triangle/Target").position = set_target_on_triangle(current_blend_color)
 				
 func average_color_list(blended_fruits):
 	var colors = []
-	var fruit_list = [["cherry", "#ff0000"], ["blueberry", "#0000ff"], ["kale", "#00ff00"], ["strawberry", "#ffa3cb"], ["banana", "#fff563"], ["orange", "#ff901d"]]
-	for i in blended_fruits:
-		for j in fruit_list:
-			if i == j[0]:
-				colors.append(Color(j[1]))
+	for fruit_name in blended_fruits:
+		#for j in fruit_list:
+		#	if i == j[0]:
+		colors.append(fruits_colors[fruit_name])
 	
 	var count = colors.size()
 	if count == 0:
@@ -281,17 +396,14 @@ func get_color_similarity(color1: Color, color2: Color):
 	
 func get_corner_positions() -> Dictionary:
 	# Ensure there is a texture loaded to avoid null errors
-	var texture = get_node("Color Triangle/Triangle").texture
-	if not texture:
-		print("woop")
-		return {}
+	var texture = get_node("Color_Triangle/Triangle").texture
 
 	# Get the base texture size in pixels
 	var tex_size = texture.get_size()
 	
 	# Calculate scaled half-extents (accounting for node scale and mirroring/flip)
-	var half_width = (tex_size.x / 2.0) * abs(get_node("Color Triangle/Triangle").scale.x) * 1.4
-	var half_height = (tex_size.y / 2.0) * abs(get_node("Color Triangle/Triangle").scale.y) * 1.4
+	var half_width = (tex_size.x / 2.0) * abs(get_node("Color_Triangle/Triangle").scale.x) * 1.4
+	var half_height = (tex_size.y / 2.0) * abs(get_node("Color_Triangle/Triangle").scale.y) * 1.4
 
 	# Calculate all four global positions
 	return {
@@ -325,10 +437,10 @@ func set_target_on_triangle(current_color: Color):
 	return marker_pos
 	
 func setup_Done():
-	$Done.text = "[left][url=\"" + "Next" + "\"]" + "Next" + "[/url][/left]" + "\n"
+	$UI_Labels/Done.text = "[left][url=\"" + "Next" + "\"]" + "Next" + "[/url][/left]" + "\n"
 				
 func setup_Dump():
-	$Dump.text = "[left][url=\"" + "Dump" + "\"]" + "Dump" + "[/url][/left]" + "\n"
+	$UI_Labels/Dump.text = "[left][url=\"" + "Dump" + "\"]" + "Dump" + "[/url][/left]" + "\n"
 	
 func setup_people():
 	for people in [$person1, $person2]:
@@ -340,6 +452,7 @@ func setup_people():
 
 
 func _on_done_meta_clicked(meta: Variant) -> void:
+	mouse_on_color_triangle = false
 	if walking == false and thanking == false:
 		if blended_fruits != []:
 			dump_blender()
@@ -357,6 +470,7 @@ func _on_done_meta_clicked(meta: Variant) -> void:
 		generate_new_color()
 
 func _on_dump_meta_clicked(meta: Variant) -> void:
+	mouse_on_color_triangle = false
 	if thanking == false:
 		dump_blender()
 	
@@ -365,12 +479,12 @@ func dump_blender():
 	blend()
 	blended_fruits = []
 	$Blendernolid/BlenderFull.modulate = Color("#ffffff00")
-	$Percent_Correct.text = "0%"
-	$Blender_Size.text = "0"
-	get_node("Color Triangle/Triangle/Target").position = set_target_on_triangle(Color("#ffffff"))
+	$UI_Labels/Percent_Correct.text = "0%"
+	$UI_Labels/Percent_Correct.visible = false
+	$UI_Labels/Blender_Size.text = "0"
+	get_node("Color_Triangle/Triangle/Target").position = set_target_on_triangle(Color("#ffffff"))
 	
 func generate_new_color():
-	
 	
 	if total_smoothie_count == 0:
 		current_size = possible_sizes[0]
@@ -390,7 +504,8 @@ func generate_new_color():
 		generate_new_color()
 	else:
 		#return(target_color)
-		$Points.text = str(total_smoothie_count-1)
+		print("secret recipe: " + str(target_color_list))
+		$UI_Labels/Points.text = str(total_smoothie_count-1)
 		
 		if total_smoothie_count == 4:
 			_build_fruit_containers(["banana"])
@@ -414,11 +529,16 @@ func _on_thanks_timer_timeout() -> void:
 
 func _on_blender_button_mouse_entered() -> void:
 	mouse_on_blender_button = true
-	Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
+	ready_to_point_hand = true
+	if on_main_menu == false:
+		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
 	
 func _on_blender_button_mouse_exited() -> void:
 	mouse_on_blender_button = false
-	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+	ready_to_point_hand = false
+	
+	if on_main_menu == false:
+		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 
 func _on_snappy_timer_timeout() -> void:
@@ -431,3 +551,38 @@ func _on_snappy_timer_timeout() -> void:
 	else:
 		#print("ohh")
 		$Request_Label.text = current_size[0] + " (" + str(current_size[1]) + " fruit)"
+
+
+func _on_area_2d_mouse_entered() -> void:
+	#if color_triangle_toggled_on == false:
+	#	$Color_Triangle.modulate = Color("#ffffff3c")#Color("ffffff78")
+	mouse_on_color_triangle = true
+	ready_to_point_hand = true
+	if on_main_menu == false:
+		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
+
+func _on_area_2d_mouse_exited() -> void:
+	#if color_triangle_toggled_on == false:
+	#	$Color_Triangle.modulate = Color("#ffffff3c")
+	mouse_on_color_triangle = false
+	ready_to_point_hand = false
+	
+	if on_main_menu == false:
+		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+		
+func apply_fonts():
+	var wet_font = load("res://assets/Bubbledee_Font.otf")
+	var dry_font = load("res://assets/Ngaco_Font.otf")
+	
+	for nod in $Menu.get_children():
+		if nod.name == "Sub_Label2":
+			all_text_nodes.append([nod, dry_font])
+		else:
+			all_text_nodes.append([nod, wet_font])
+	for nod in $UI_Labels.get_children():
+		all_text_nodes.append([nod, dry_font])
+	all_text_nodes.append([$Request_Label, dry_font])
+	
+	for tex in all_text_nodes:
+		tex[0].add_theme_font_override("font", tex[1])
+		tex[0].add_theme_font_override("normal_font", tex[1])

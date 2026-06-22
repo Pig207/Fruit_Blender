@@ -1,4 +1,5 @@
 extends AudioStreamPlayer
+var audio_volume = 100
 
 func _ready():
 	# 1. Load your MP3 file (replace with your actual file path)
@@ -8,10 +9,10 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	# 3. Start playing
-	play()
-
-func _process(_delta):
-	# 4. If the track finishes, play it again loop-style
-	if not playing:
+	if audio_volume > 0:
 		play()
-		pass
+
+func _physics_process(delta: float) -> void:
+	# 4. If the track finishes, play it again loop-style
+	if not playing and audio_volume > 0:
+		play()
