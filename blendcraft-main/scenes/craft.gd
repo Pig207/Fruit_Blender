@@ -527,7 +527,6 @@ func select_random_fruit_color():
 
 
 func _on_thanks_timer_timeout() -> void:
-	print('w')
 	if walking == true and thanking == true and $Thanks_Timer.is_stopped():
 		$Thanks_Timer.start()
 	elif thanking == true:
