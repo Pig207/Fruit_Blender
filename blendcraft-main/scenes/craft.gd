@@ -41,7 +41,7 @@ var ready_to_point_hand_special = null
 var shaders_to_update = []
 var last_container_hover = null
 var all_text_nodes = []
-
+var coin_balance = 1000
 # da blenda animation
 # Configuration variables
 var blend_duration: float = 0.5  # Total time in seconds
@@ -189,6 +189,7 @@ func start_game():
 	$UI_Labels/Percent_Correct.text = "0%"
 	$UI_Labels/Percent_Correct.visible = false
 	$UI_Labels/Blender_Size.text = "0"
+	$UI_Labels/CoinCounter.bbcode_text  = "[img]res://assets/slumcoin.png[/img] " + "[font_size=36]"+format_number(coin_balance)
 	people_list = [$person1, $person2]
 	triangle_corners = get_corner_positions()
 	generate_new_color()
@@ -618,3 +619,35 @@ func build_placeholder_containers():
 			coun += 1
 		$GridOfContainers2.add_child(container)
 		entities_list.append(container)
+
+
+func update_balance(amount):
+	coin_balance += amount
+	$UI_Labels/CoinCounter.bbcode_text = "[img]res://assets/slumcoin.png[/img] " + "[font_size=36]" + format_number(coin_balance)
+
+	var label = Label.new()
+	label.text = ("-" if amount < 0 else "+") + str(abs(amount))
+	label.modulate = Color.GREEN if amount > 0 else Color.RED
+	label.position = $UI_Labels/CoinCounter.position + Vector2(85, 35)
+	label.add_theme_font_size_override("font_size", 28)
+	label.add_theme_font_override("font", load("res://assets/Bubbledee_Font.otf"))
+	add_child(label)
+
+	var tween = create_tween()
+	tween.tween_property(label, "position", label.position + Vector2(0, 50), 1.0).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(label, "modulate:a", 0, 1.0).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
+
+	await tween.finished
+	label.queue_free()
+
+func format_number(number):
+	var string = str(number)
+	var length = string.length()
+	var formatted = ""
+
+	for i in range(length):
+		formatted += string[i]
+		if (length - i - 1) % 3 == 0 and i != length - 1:
+			formatted += ","
+
+	return formatted

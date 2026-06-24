@@ -11,7 +11,7 @@ extends Control
 const PhysicsFruit = preload("res://scenes/physics_fruit.tscn")
 var _active_fruit = null
 var fruit_list = [["cherry", "#ff0000"], ["blueberry", "#0000ff"], ["kale", "#00ff00"], ["strawberry", "#ffa3cb"], ["banana", "#fff563"]]#, ["orange", "#ff901d"]]
-
+var fruit_prices = [5, 5, 5, 5, 5]
 func _ready():
 	# signals
 	mouse_entered.connect(_on_mouse_entered)
@@ -115,6 +115,11 @@ func _spawn_dragging_fruit(): # pick up fruit
 	get_parent().get_parent().update_shader_mode(1, fruit_name, true)
 	get_parent().get_parent().last_container_hover = self
 	
+	#update balance (bought fruit)
+	var fruit_index = fruit_list.find(fruit_name)
+	var fruit_price = fruit_prices[fruit_index]
+	get_parent().get_parent().update_balance(-fruit_price)
+	
 func remove_one_fruit(): # remove fruit from pickup zone
 	pass
 	#_update_cursor()
@@ -122,6 +127,11 @@ func remove_one_fruit(): # remove fruit from pickup zone
 func add_one_fruit(): # add a fruit back to pickup zone
 
 	_build_fruits()
+	
+	#update balance (sold fruit back)
+	var fruit_index = fruit_list.find(fruit_name)
+	var fruit_price = fruit_prices[fruit_index]
+	get_parent().get_parent().update_balance(fruit_price)
 	#_update_cursor()
 
 func setup(name: String, count: int): # init
