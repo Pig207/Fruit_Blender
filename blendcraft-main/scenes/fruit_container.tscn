@@ -88,8 +88,6 @@ shape = SubResource("RectangleShape2D_8kdca")
 
 [node name="Img" type="TextureRect" parent="." unique_id=1946991794]
 layout_mode = 0
-offset_right = 107.0
-offset_bottom = 94.0
 
 [node name="Container_Bottom" type="TextureRect" parent="Img" unique_id=1904852982]
 texture_filter = 1

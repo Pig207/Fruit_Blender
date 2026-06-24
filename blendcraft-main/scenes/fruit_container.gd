@@ -23,6 +23,9 @@ func _ready():
 	container_fruit.pivot_offset = container_fruit.size / 2 # offset for hover animation
 	container_top.pivot_offset = container_top.size / 2 # offset for hover animation
 	container_bottom.pivot_offset = container_bottom.size / 2 # offset for hover animation
+	
+	#if fruit_name in ["banana", "strawberry"]:
+	#	$Img/Container_All_Fruit.z_index += 10
 '''
 func _update_cursor():
 	#print(get_parent().get_parent().ready_to_point_hand )
@@ -113,6 +116,9 @@ func _spawn_dragging_fruit(): # pick up fruit
 	fruit.fruit_name = fruit_name
 	fruit.source_container = self
 	fruit.position = get_global_mouse_position()
+	
+	#fruit.z_index = self.z_index
+	
 	fruit.start_dragging()
 	if [1,2].pick_random() == 1:
 		fruit.get_node("FruitImage").flip_h = true
@@ -150,7 +156,8 @@ func _build_fruits(): # set fruit png
 	for i in container_fruit.get_children():
 		var texture
 		var texture2
-		if [1,2,3,4,5].pick_random() in [1,2]:
+		var rand_val = [1,2,3,4,5].pick_random()
+		if rand_val in [1,2]:
 			if ResourceLoader.exists("res://assets/fruits/fruit_" + fruit_name + "_white2.png"):
 				texture = load("res://assets/fruits/fruit_" + fruit_name + "_white2.png")
 			else:
@@ -160,8 +167,12 @@ func _build_fruits(): # set fruit png
 			else:
 				texture2 = null#load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
 		else:
-			texture = load("res://assets/fruits/fruit_" + fruit_name + "_white.png")
-			texture2 = load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
+			if rand_val in [3] and ResourceLoader.exists("res://assets/fruits/fruit_" + fruit_name + "_white3.png"):
+				texture = load("res://assets/fruits/fruit_" + fruit_name + "_white3.png")
+				texture2 = null #just bananas for now
+			else:
+				texture = load("res://assets/fruits/fruit_" + fruit_name + "_white.png")
+				texture2 = load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
 		
 		i.texture = texture
 		i.self_modulate = get_parent().get_parent().fruits_colors[fruit_name]

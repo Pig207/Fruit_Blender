@@ -37,7 +37,8 @@ func _ready():
 	mouse_entered.connect(_on_mouse_entered) # mouse hovering fruit
 	mouse_exited.connect(_on_mouse_exited) # mouse no longer hovering fruit 
 	#sprite.texture = load("res://assets/fruits/" + fruit_name + ".png")
-	if [1,2,3,4,5].pick_random() in [1,2]:
+	var rand_val = [1,2,3,4,5].pick_random()
+	if rand_val in [1,2]:
 		var texture1
 		var texture2
 		if ResourceLoader.exists("res://assets/fruits/fruit_" + fruit_name + "_white2.png"):
@@ -51,8 +52,12 @@ func _ready():
 		sprite.texture = texture1
 		sprite2.texture = texture2
 	else:
-		sprite.texture = load("res://assets/fruits/fruit_" + fruit_name + "_white.png")
-		sprite2.texture = load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
+		if rand_val in [3] and ResourceLoader.exists("res://assets/fruits/fruit_" + fruit_name + "_white3.png"):
+			sprite.texture = load("res://assets/fruits/fruit_" + fruit_name + "_white3.png")
+			sprite2.texture = null #just bananas for now
+		else:
+			sprite.texture = load("res://assets/fruits/fruit_" + fruit_name + "_white.png")
+			sprite2.texture = load("res://assets/fruits/fruit_" + fruit_name + "_stem.png")
 	#self.material = pulse_shader
 	#pulse_mat.set_shader_parameter("mode", 2)
 	#pulse_shader = load("res://scenes/color_target_pulse.gdshader")

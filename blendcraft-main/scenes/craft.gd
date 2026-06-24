@@ -57,7 +57,7 @@ var max_compress2: float = 0.1   # Squashes down by 15% at its peak
 # Tracking variables
 var blend_timer2: float = 0.0
 var is_dumping: bool = false
-@onready var base_scale_y2: float = 0.519043
+@onready var base_scale_y2: float = 0.61 #0.519043
 
 @onready var fruit_slot_area = $GridOfContainers  # your HBoxContainer
 const FruitContainer = preload("res://scenes/fruit_container.tscn")
@@ -192,6 +192,7 @@ func start_game():
 	people_list = [$person1, $person2]
 	triangle_corners = get_corner_positions()
 	generate_new_color()
+	build_placeholder_containers()
 	_build_fruit_containers(["blueberry", "kale", "cherry"])
 	$Blendernolid/BlenderFull.modulate = Color("#ffffff00")
 	$Request.modulate = Color("#ffffff00")
@@ -205,7 +206,7 @@ func start_game():
 		ready_to_point_hand_special.point(false)
 
 # add all the fruits in a given fruit dish to the grid container
-func _build_fruit_containers(arra):
+func _build_fruit_containers(arra, above = false):
 	for fruit_name in arra: #fruits:
 		#print(fruit_name)
 		#print(fruits[fruit_name])
@@ -213,6 +214,9 @@ func _build_fruit_containers(arra):
 		fruit_slot_area.add_child(container)
 		container.setup(fruit_name, fruits[fruit_name])
 		entities_list.append(container)
+		
+		if above == true:
+			container.z_index += 1
 		
 		var central_target = $Color_Triangle/Triangle/Target
 		#for i in fruit_list:
@@ -512,9 +516,9 @@ func generate_new_color():
 		$UI_Labels/Points.text = str(total_smoothie_count-1)
 		
 		if total_smoothie_count == 4:
-			_build_fruit_containers(["banana"])
+			_build_fruit_containers(["banana"], true)
 		elif total_smoothie_count == 8:
-			_build_fruit_containers(["strawberry"])
+			_build_fruit_containers(["strawberry"], true)
 
 func select_random_fruit_color():
 	#print(total_smoothie_count)
@@ -594,3 +598,11 @@ func apply_fonts():
 	for tex in all_text_nodes:
 		tex[0].add_theme_font_override("font", tex[1])
 		tex[0].add_theme_font_override("normal_font", tex[1])
+		
+func build_placeholder_containers():
+	for i in range(6):
+		var container = TextureRect.new()#FruitContainer.instantiate()
+		$GridOfContainers2.add_child(container)
+		container.texture = load("res://assets/container.png")
+		container.z_index -= 2
+		container.mouse_filter = 2
