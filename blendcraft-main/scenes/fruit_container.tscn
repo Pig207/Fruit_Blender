@@ -76,7 +76,7 @@ custom_minimum_size = Vector2(107.19, 88.105)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 113.0
-offset_bottom = 88.105
+offset_bottom = 88.10501
 script = ExtResource("1_f5q2v")
 
 [node name="PickupZone" type="Area2D" parent="." unique_id=1104362524 groups=["container_zone"]]
@@ -88,6 +88,7 @@ shape = SubResource("RectangleShape2D_8kdca")
 
 [node name="Img" type="TextureRect" parent="." unique_id=1946991794]
 layout_mode = 0
+pivot_offset = Vector2(55, 47)
 
 [node name="Container_Bottom" type="TextureRect" parent="Img" unique_id=1904852982]
 texture_filter = 1

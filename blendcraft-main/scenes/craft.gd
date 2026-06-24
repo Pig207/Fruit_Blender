@@ -600,9 +600,21 @@ func apply_fonts():
 		tex[0].add_theme_font_override("normal_font", tex[1])
 		
 func build_placeholder_containers():
-	for i in range(6):
-		var container = TextureRect.new()#FruitContainer.instantiate()
-		$GridOfContainers2.add_child(container)
-		container.texture = load("res://assets/container.png")
+	for w in range(6):
+		#var container = TextureRect.new()#FruitContainer.instantiate()
+		var container = FruitContainer.instantiate()
 		container.z_index -= 2
+		container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		container.mouse_filter = 2
+		var coun = 0
+		for i in container.get_children():
+			if coun == 0:
+				i.free()
+			elif coun == 1:
+				i.texture = load("res://assets/container.png")
+				i.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				for j in i.get_children():
+					j.free()
+			coun += 1
+		$GridOfContainers2.add_child(container)
+		entities_list.append(container)

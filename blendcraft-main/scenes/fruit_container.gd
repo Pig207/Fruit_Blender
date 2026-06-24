@@ -19,37 +19,15 @@ func _ready():
 	_build_fruits()
 	#_update_cursor()
 	
-	container_img.pivot_offset = container_img.size / 2 # offset for hover animation
-	container_fruit.pivot_offset = container_fruit.size / 2 # offset for hover animation
-	container_top.pivot_offset = container_top.size / 2 # offset for hover animation
-	container_bottom.pivot_offset = container_bottom.size / 2 # offset for hover animation
+	#container_img.pivot_offset = container_img.size / 2 # offset for hover animation
+	#if not container_fruit:
+	#	return
+	#container_fruit.pivot_offset = container_fruit.size / 2 # offset for hover animation
+	#container_top.pivot_offset = container_top.size / 2 # offset for hover animation
+	#container_bottom.pivot_offset = container_bottom.size / 2 # offset for hover animation
 	
 	#if fruit_name in ["banana", "strawberry"]:
 	#	$Img/Container_All_Fruit.z_index += 10
-'''
-func _update_cursor():
-	#print(get_parent().get_parent().ready_to_point_hand )
-	if get_global_rect().has_point(get_global_mouse_position()):
-		if fruit_count > 0:
-			
-			#if get_parent().get_parent().on_main_menu == false:
-			#get_parent().get_parent().ready_to_point_hand = false
-			mouse_default_cursor_shape = CURSOR_POINTING_HAND
-			if not (_active_fruit and is_instance_valid(_active_fruit) and _active_fruit.is_dragging):
-				_scale_image_up()
-			#else:
-				#get_parent().get_parent().ready_to_point_hand = true
-				#pass
-				
-		else: #theoretical, i dont think this will happen yet
-			#get_parent().get_parent().ready_to_point_hand = false
-			mouse_default_cursor_shape = CURSOR_ARROW
-			#get_parent().get_parent().ready_to_point_hand = false
-	else:
-		mouse_default_cursor_shape = CURSOR_ARROW
-		
-		#get_parent().get_parent().ready_to_point_hand = false
-'''
 
 func point(hand):
 	if hand == true:
@@ -89,6 +67,7 @@ func _on_mouse_exited():
 	_scale_image_down()
 
 func _scale_image_up(): # animation for hovering container
+	
 	var tween = create_tween()
 	tween.tween_property(container_img, "scale", Vector2(1.05, 1.05), 0.1)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
@@ -153,6 +132,8 @@ func setup(name: String, count: int): # init
 func _build_fruits(): # set fruit png
 	for child in fruit_grid.get_children():
 		child.queue_free()
+	if not container_fruit:
+		return
 	for i in container_fruit.get_children():
 		var texture
 		var texture2
