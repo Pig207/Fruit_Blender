@@ -19,17 +19,14 @@ var in_blender = []
 var blended_fruits = []
 var maximize_brightness = true #change to false for old mode
 var current_blend_color = Color("#ffffff00")
-var walking = false
-var waiting_to_walk = 0
 var possible_sizes = [["Small", 2], ["Small", 2], ["Small", 2], ["Medium", 3], ["Medium", 3], ["Large", 5]]
 var fruit_list = [["cherry", "#ff0000"], ["blueberry", "#0000ff"], ["kale", "#00ff00"], ["banana", "#fff563"], ["strawberry", "#ffa3cb"]]#, ["orange", "#ff901d"]]
 var target_color
 var percentage_similarity = 0
 var current_size = ["Large", 5]
-var thanking = false
 var mouse_on_blender_button = false
 var total_smoothie_count = 0
-var snappyfied = false
+var current_customer_name = ""
 var triangle_corners
 var on_main_menu = true
 var entities_list = []
@@ -61,25 +58,27 @@ var is_dumping: bool = false
 
 @onready var fruit_slot_area = $GridOfContainers  # your HBoxContainer
 const FruitContainer = preload("res://scenes/fruit_container.tscn")
-
-var people_speed: float = 3.0
-#var people_bob_speed: float = 12.0     # How fast it steps up and down
-var people_bob_height: float = 15.0    # How high the bounce goes
-var people_list = [$person1, $person2]
+var customer_scene = preload("res://scenes/customer.tscn")
+var customer
 
 func _ready():
 	randomize()
 	apply_fonts()
 	start_game()
-	
+
 func _physics_process(delta: float):
 	#print(ready_to_point_hand)
 	update_shaders(delta)
 	if on_main_menu == true:
+		var game_started = false
 		if Input.is_action_just_released("either_click"):
 			$Menu.visible = false
 			$UI_Labels.visible = true
 			on_main_menu = false
+			if game_started == false:
+				game_started = true
+				print('game started, spawning')
+				spawn_customer()
 			if ready_to_point_hand == true:
 				#ready_to_point_hand = false
 				Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
@@ -87,20 +86,9 @@ func _physics_process(delta: float):
 				ready_to_point_hand_special.point(true)
 				#ready_to_point_hand_special = null
 			#start_game()
+		
 		return
-	if walking == true:
-		if people_list[waiting_to_walk].position.x < 570:
-			for p in people_list:
-				p.position.x += people_speed
-				var bounce = abs(sin(p.position.x)) * people_bob_height
-				p.position.y = 250 - bounce
-		else:
-			walking = false
-			$Request.modulate = target_color
-			$Request_Label.visible = true
-			
-			if total_smoothie_count == 3 and $Snappy_Timer.is_stopped():
-				$Snappy_Timer.start()
+	
 			
 	if Input.is_action_just_pressed("left_click"):
 		if mouse_on_blender_button == true:
@@ -124,6 +112,7 @@ func _physics_process(delta: float):
 				ent.queue_free()
 				
 		entities_list = []
+		coin_balance = 1000
 		_ready()
 		
 	if is_blending:
@@ -182,29 +171,50 @@ func start_game():
 	shaders_to_update = []
 	in_blender = []
 	blended_fruits = []
-	$Thanks_Timer.stop()
-	$Snappy_Timer.stop()
 	total_smoothie_count = 0
-	$UI_Labels/Points.text = str(total_smoothie_count-1)
+	$UI_Labels/Points.text = str(total_smoothie_count)
 	$UI_Labels/Percent_Correct.text = "0%"
 	$UI_Labels/Percent_Correct.visible = false
 	$UI_Labels/Blender_Size.text = "0"
 	$UI_Labels/CoinCounter.bbcode_text  = "[img]res://assets/slumcoin.png[/img] " + "[font_size=36]"+format_number(coin_balance)
-	people_list = [$person1, $person2]
 	triangle_corners = get_corner_positions()
-	generate_new_color()
 	build_placeholder_containers()
 	_build_fruit_containers(["blueberry", "kale", "cherry"])
 	$Blendernolid/BlenderFull.modulate = Color("#ffffff00")
-	$Request.modulate = Color("#ffffff00")
-	$Request_Label.visible = false
 	setup_Done()
 	setup_Dump()
-	setup_people()
+	
 	get_node("Color_Triangle/Triangle/Target").position = set_target_on_triangle(Color("#ffffff"))
 	$Color_Triangle.modulate = Color("#ffffff3c")
 	if ready_to_point_hand_special != null:
 		ready_to_point_hand_special.point(false)
+
+func spawn_customer():
+	#print('spawning customer')
+	
+	var new_customer = customer_scene.instantiate()
+	customer = new_customer
+	entities_list.append(customer)
+	customer.previous_customer = current_customer_name
+	new_customer.position = Vector2(-117, 250)
+	new_customer.total_smoothie_count = total_smoothie_count
+	new_customer.connect("smoothie_received", Callable(self, "_on_smoothie_received"))
+	add_child(new_customer)
+	current_customer_name = new_customer.current_customer
+	new_customer.generate_new_color()
+
+func _on_smoothie_received():
+	total_smoothie_count += 1
+	$UI_Labels/Points.text = str(total_smoothie_count)
+	
+	if total_smoothie_count == 4:
+		_build_fruit_containers(["banana"], true)
+	elif total_smoothie_count == 8:
+		_build_fruit_containers(["strawberry"], true)
+	
+	
+	dump_blender()
+	spawn_customer()
 
 # add all the fruits in a given fruit dish to the grid container
 func _build_fruit_containers(arra, above = false):
@@ -291,8 +301,7 @@ func start_dumping():
 	is_dumping = true
 
 func blend(dumpin = false):
-	
-	if thanking == true:
+	if customer.thanking == true:
 		return
 	var fruits = ["cherry", "blueberry", "kale", "strawberry", "banana"]
 	var goners = []
@@ -307,7 +316,7 @@ func blend(dumpin = false):
 		in_blender.erase(i)
 		i.queue_free()
 		
-	if blended_fruits  != []:
+	if blended_fruits  != [] and not dumpin:
 		current_blend_color = average_color_list(blended_fruits)
 		if len(blended_fruits) <= 5:
 			$Blendernolid/BlenderFull.texture = load("res://assets/blenderglass_white" + str(len(blended_fruits)) + ".png")
@@ -316,20 +325,15 @@ func blend(dumpin = false):
 		$Blendernolid/BlenderFull.modulate = current_blend_color
 		
 		percentage_similarity = (get_color_similarity(current_blend_color, target_color))
+		
 		if percentage_similarity < 10:
 			$UI_Labels/Percent_Correct.text = "%01d" % [percentage_similarity] + "%"
 		else:
 			$UI_Labels/Percent_Correct.text = "%02d" % [percentage_similarity] + "%"
 		$UI_Labels/Percent_Correct.visible = true
 		$UI_Labels/Blender_Size.text = str(len(blended_fruits))
-		if percentage_similarity == 100.0 and ((len(blended_fruits)) >= current_size[1]) and $Thanks_Timer.is_stopped() == true:
-			$Thanks_Timer.start()
-			#$Request.modulate = target_color
-			thanking = true
-			if total_smoothie_count < 3:
-				$Request_Label.text = ["Thanks!", "Thank you!", "Perfect!"].pick_random()
-			else:
-				$Request_Label.text = ["Thanks!", "Thank you!", "About time...", "Perfect!"].pick_random()
+		if percentage_similarity == 100.0 and ((len(blended_fruits)) >= customer.current_size[1]):
+			customer.receive_smoothie(current_blend_color)
 	get_node("Color_Triangle/Triangle/Target").position = set_target_on_triangle(current_blend_color)
 				
 func average_color_list(blended_fruits):
@@ -449,38 +453,19 @@ func setup_Done():
 func setup_Dump():
 	$UI_Labels/Dump.text = "[left][url=\"" + "Dump" + "\"]" + "Dump" + "[/url][/left]" + "\n"
 	
-func setup_people():
-	for people in [$person1, $person2]:
-		people.visible = true
-	$person1.position = Vector2(-117, 250)
-	$person2.position = Vector2(11700, 250)
-	walking = true
-	waiting_to_walk = 0
-
 
 func _on_done_meta_clicked(meta: Variant) -> void:
+	print('clicked next')
 	mouse_on_color_triangle = false
-	if walking == false and thanking == false:
+	
+	if customer.walking == false and customer.thanking == false:
 		if blended_fruits != []:
 			dump_blender()
-		#generate_new_color()
-			#waiting_to_walk
-		$Request.modulate = Color("#ffffff00")
-		$Request_Label.visible = false
-		if waiting_to_walk == 0:
-			waiting_to_walk = 1
-			$person2.position = Vector2(-117, 250)
-		else:
-			waiting_to_walk = 0
-			$person1.position = Vector2(-117, 250)
-		walking = true
-		generate_new_color()
-		$Thanks_Timer.stop()
-		thanking = false
-
+		customer.skipped = true
+		spawn_customer()
 func _on_dump_meta_clicked(meta: Variant) -> void:
 	mouse_on_color_triangle = false
-	if thanking == false:
+	if customer.thanking == false:
 		dump_blender()
 	
 func dump_blender():
@@ -493,51 +478,7 @@ func dump_blender():
 	$UI_Labels/Blender_Size.text = "0"
 	get_node("Color_Triangle/Triangle/Target").position = set_target_on_triangle(Color("#ffffff"))
 	
-func generate_new_color():
-	
-	if total_smoothie_count == 0:
-		current_size = possible_sizes[0]
-	elif total_smoothie_count == 1:
-		current_size = possible_sizes[4]
-	else:
-		current_size = possible_sizes.pick_random()
-	total_smoothie_count += 1
-	var target_color_list = []
-	
-	$Request_Label.text = current_size[0] + "\n(" + str(current_size[1]) + " fruit)"
-	for i in range(1, current_size[1] + 1):
-		target_color_list.append(select_random_fruit_color())
-	target_color = average_color_list(target_color_list)
-	if target_color == Color("#ffffff"):
-		total_smoothie_count -= 1
-		generate_new_color()
-	else:
-		#return(target_color)
-		print("secret recipe: " + str(target_color_list))
-		$UI_Labels/Points.text = str(total_smoothie_count-1)
-		
-		if total_smoothie_count == 4:
-			_build_fruit_containers(["banana"], true)
-		elif total_smoothie_count == 8:
-			_build_fruit_containers(["strawberry"], true)
 
-func select_random_fruit_color():
-	#print(total_smoothie_count)
-	if total_smoothie_count >= 8:
-		return ((fruit_list.pick_random())[0])
-	elif total_smoothie_count >= 4:
-		return (([fruit_list[0], fruit_list[1], fruit_list[2], fruit_list[3]].pick_random())[0])
-	else:
-		return (([fruit_list[0], fruit_list[1], fruit_list[2]].pick_random())[0])
-
-
-func _on_thanks_timer_timeout() -> void:
-	if walking == true and thanking == true and $Thanks_Timer.is_stopped():
-		$Thanks_Timer.start()
-	elif thanking == true:
-		$Thanks_Timer.stop()
-		thanking = false
-		_on_done_meta_clicked("Next")
 
 
 func _on_blender_button_mouse_entered() -> void:
@@ -554,16 +495,7 @@ func _on_blender_button_mouse_exited() -> void:
 		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 
-func _on_snappy_timer_timeout() -> void:
-	if snappyfied == false:
-		#print("eh")
-		snappyfied = true
-		$Request_Label.text = "and make it\nsnappy!"
-		$Snappy_Timer.stop()
-		$Snappy_Timer.start(1.0)
-	else:
-		#print("ohh")
-		$Request_Label.text = current_size[0] + "\n(" + str(current_size[1]) + " fruit)"
+
 
 
 func _on_area_2d_mouse_entered() -> void:
@@ -594,7 +526,7 @@ func apply_fonts():
 			all_text_nodes.append([nod, wet_font])
 	for nod in $UI_Labels.get_children():
 		all_text_nodes.append([nod, dry_font])
-	all_text_nodes.append([$Request_Label, dry_font])
+
 	
 	for tex in all_text_nodes:
 		tex[0].add_theme_font_override("font", tex[1])

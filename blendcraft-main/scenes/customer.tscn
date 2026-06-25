@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cftyoj7tg0dw2"]
+
+[ext_resource type="Script" uid="uid://dluoqommjdwf" path="res://scenes/customer.gd" id="1_ktfjk"]
+[ext_resource type="Texture2D" uid="uid://dweqw8pggnkpm" path="res://assets/person2.png" id="1_qqxhk"]
+[ext_resource type="Texture2D" uid="uid://dfgx8m06o54d3" path="res://assets/bubble.png" id="3_8qg4y"]
+[ext_resource type="Texture2D" uid="uid://boxg1ob1spx2d" path="res://assets/smoothie.png" id="3_qqxhk"]
+[ext_resource type="Texture2D" uid="uid://bsk7f2apiuw6q" path="res://assets/smoothie_filling.png" id="4_846g6"]
+
+[node name="Node2D" type="Sprite2D" unique_id=2060720848]
+z_index = -5
+texture = ExtResource("1_qqxhk")
+script = ExtResource("1_ktfjk")
+
+[node name="Smoothie" type="Sprite2D" parent="." unique_id=673288252]
+position = Vector2(-62.782516, 34.06)
+scale = Vector2(0.565, 0.565)
+texture = ExtResource("3_qqxhk")
+
+[node name="SmoothieFilling" type="Sprite2D" parent="." unique_id=620707695]
+position = Vector2(-62.782516, 34.06)
+scale = Vector2(0.565, 0.565)
+texture = ExtResource("4_846g6")
+
+[node name="Request" type="Sprite2D" parent="." unique_id=845095723]
+position = Vector2(163, -93)
+scale = Vector2(0.098042466, 0.09804248)
+texture = ExtResource("3_8qg4y")
+
+[node name="Request_Label" type="Label" parent="." unique_id=1316195556]
+texture_filter = 1
+offset_left = 75.0
+offset_top = -142.0
+offset_right = 261.0
+offset_bottom = -62.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 21
+text = "Small ( 2 )"
+horizontal_alignment = 1
+vertical_alignment = 1

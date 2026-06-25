@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cftyoj7tg0dw2"]
+
+[ext_resource type="Script" uid="uid://dluoqommjdwf" path="res://scenes/customer.gd" id="1_ktfjk"]
+
+[node name="Node2D" type="Sprite2D" unique_id=2060720848]
+script = ExtResource("1_ktfjk")
+
+[node name="Smoothie" type="Sprite2D" parent="." unique_id=673288252]
+
+[node name="SmoothieFilling" type="Sprite2D" parent="." unique_id=620707695]
+
+[node name="Request_Label" type="Label" parent="." unique_id=1316195556]
+z_index = -3
+texture_filter = 1
+offset_left = 658.0
+offset_top = 63.0
+offset_right = 844.0
+offset_bottom = 143.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 21
+text = "Small ( 2 )"
+horizontal_alignment = 1
+vertical_alignment = 1
